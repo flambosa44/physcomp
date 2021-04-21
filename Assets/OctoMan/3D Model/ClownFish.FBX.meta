@@ -1,0 +1,297 @@
+fileFormatVersion: 2
+guid: 01bae6166a0f39a4891f610561feb491
+timeCreated: 1465425063
+licenseType: Store
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: BE_BottomFin_L
+    100002: BE_BottomFin_R
+    100004: BE_Fiin_L_D
+    100006: BE_Fiin_L_M
+    100008: BE_Fiin_L_U
+    100010: BE_Fiin_R_D
+    100012: BE_Fiin_R_M
+    100014: BE_Fiin_R_U
+    100016: BN_BottomFin_L1
+    100018: BN_BottomFin_L2
+    100020: BN_BottomFin_L3
+    100022: BN_BottomFin_R1
+    100024: BN_BottomFin_R2
+    100026: BN_BottomFin_R3
+    100028: BN_Fiin_L
+    100030: BN_Fiin_L_D1
+    100032: BN_Fiin_L_D2
+    100034: BN_Fiin_L_M1
+    100036: BN_Fiin_L_M2
+    100038: BN_Fiin_L_U1
+    100040: BN_Fiin_L_U1 1
+    100042: BN_Fiin_R
+    100044: BN_Fiin_R_D1
+    100046: BN_Fiin_R_D2
+    100048: BN_Fiin_R_M1
+    100050: BN_Fiin_R_M2
+    100052: BN_Fiin_R_U1
+    100054: BN_Fiin_R_U1 1
+    100056: Bone001
+    100058: Bone002
+    100060: Bone003
+    100062: Bone004
+    100064: Bone005
+    100066: Bone006
+    100068: Bone007
+    100070: Bone008
+    100072: Bone009
+    100074: Bone010
+    100076: Bone011
+    100078: ClownFish
+    100080: //RootNode
+    100082: Point001
+    100084: BE_Spine
+    100086: BN_Fiin_L_U2
+    100088: BN_Fiin_R_U2
+    100090: BN_Spine01
+    100092: BN_Spine010
+    100094: BN_Spine02
+    100096: BN_Spine03
+    100098: BN_Spine04
+    100100: BN_Spine05
+    100102: BN_Spine06
+    100104: BN_Spine07
+    100106: BN_Spine08
+    100108: BN_Spine09
+    400000: BE_BottomFin_L
+    400002: BE_BottomFin_R
+    400004: BE_Fiin_L_D
+    400006: BE_Fiin_L_M
+    400008: BE_Fiin_L_U
+    400010: BE_Fiin_R_D
+    400012: BE_Fiin_R_M
+    400014: BE_Fiin_R_U
+    400016: BN_BottomFin_L1
+    400018: BN_BottomFin_L2
+    400020: BN_BottomFin_L3
+    400022: BN_BottomFin_R1
+    400024: BN_BottomFin_R2
+    400026: BN_BottomFin_R3
+    400028: BN_Fiin_L
+    400030: BN_Fiin_L_D1
+    400032: BN_Fiin_L_D2
+    400034: BN_Fiin_L_M1
+    400036: BN_Fiin_L_M2
+    400038: BN_Fiin_L_U1
+    400040: BN_Fiin_L_U1 1
+    400042: BN_Fiin_R
+    400044: BN_Fiin_R_D1
+    400046: BN_Fiin_R_D2
+    400048: BN_Fiin_R_M1
+    400050: BN_Fiin_R_M2
+    400052: BN_Fiin_R_U1
+    400054: BN_Fiin_R_U1 1
+    400056: Bone001
+    400058: Bone002
+    400060: Bone003
+    400062: Bone004
+    400064: Bone005
+    400066: Bone006
+    400068: Bone007
+    400070: Bone008
+    400072: Bone009
+    400074: Bone010
+    400076: Bone011
+    400078: //RootNode
+    400080: ClownFish
+    400082: Point001
+    400084: BE_Spine
+    400086: BN_Fiin_L_U2
+    400088: BN_Fiin_R_U2
+    400090: BN_Spine01
+    400092: BN_Spine010
+    400094: BN_Spine02
+    400096: BN_Spine03
+    400098: BN_Spine04
+    400100: BN_Spine05
+    400102: BN_Spine06
+    400104: BN_Spine07
+    400106: BN_Spine08
+    400108: BN_Spine09
+    4300000: ClownFish
+    7400000: Take 001
+    9500000: //RootNode
+    13700000: ClownFish
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleRotations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Take 001
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 47
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 1
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: BN_Spine01
+        weight: 1
+      - path: BN_Spine01/BN_Fiin_L
+        weight: 1
+      - path: BN_Spine01/BN_Fiin_L/BN_Fiin_L_D1
+        weight: 1
+      - path: BN_Spine01/BN_Fiin_L/BN_Fiin_L_D1/BN_Fiin_L_D2
+        weight: 1
+      - path: BN_Spine01/BN_Fiin_L/BN_Fiin_L_D1/BN_Fiin_L_D2/BE_Fiin_L_D
+        weight: 1
+      - path: BN_Spine01/BN_Fiin_L/BN_Fiin_L_M1
+        weight: 1
+      - path: BN_Spine01/BN_Fiin_L/BN_Fiin_L_M1/BN_Fiin_L_M2
+        weight: 1
+      - path: BN_Spine01/BN_Fiin_L/BN_Fiin_L_M1/BN_Fiin_L_M2/BE_Fiin_L_M
+        weight: 1
+      - path: BN_Spine01/BN_Fiin_L/BN_Fiin_L_U1
+        weight: 1
+      - path: BN_Spine01/BN_Fiin_L/BN_Fiin_L_U1/BN_Fiin_L_U2
+        weight: 1
+      - path: BN_Spine01/BN_Fiin_L/BN_Fiin_L_U1/BN_Fiin_L_U2/BE_Fiin_L_U
+        weight: 1
+      - path: BN_Spine01/BN_Fiin_R
+        weight: 1
+      - path: BN_Spine01/BN_Fiin_R/BN_Fiin_R_D1
+        weight: 1
+      - path: BN_Spine01/BN_Fiin_R/BN_Fiin_R_D1/BN_Fiin_R_D2
+        weight: 1
+      - path: BN_Spine01/BN_Fiin_R/BN_Fiin_R_D1/BN_Fiin_R_D2/BE_Fiin_R_D
+        weight: 1
+      - path: BN_Spine01/BN_Fiin_R/BN_Fiin_R_M1
+        weight: 1
+      - path: BN_Spine01/BN_Fiin_R/BN_Fiin_R_M1/BN_Fiin_R_M2
+        weight: 1
+      - path: BN_Spine01/BN_Fiin_R/BN_Fiin_R_M1/BN_Fiin_R_M2/BE_Fiin_R_M
+        weight: 1
+      - path: BN_Spine01/BN_Fiin_R/BN_Fiin_R_U1
+        weight: 1
+      - path: BN_Spine01/BN_Fiin_R/BN_Fiin_R_U1/BN_Fiin_R_U2
+        weight: 1
+      - path: BN_Spine01/BN_Fiin_R/BN_Fiin_R_U1/BN_Fiin_R_U2/BE_Fiin_R_U
+        weight: 1
+      - path: BN_Spine01/BN_Spine02
+        weight: 1
+      - path: BN_Spine01/BN_Spine02/BN_BottomFin_L1
+        weight: 1
+      - path: BN_Spine01/BN_Spine02/BN_BottomFin_L1/BN_BottomFin_L2
+        weight: 1
+      - path: BN_Spine01/BN_Spine02/BN_BottomFin_L1/BN_BottomFin_L2/BN_BottomFin_L3
+        weight: 1
+      - path: BN_Spine01/BN_Spine02/BN_BottomFin_L1/BN_BottomFin_L2/BN_BottomFin_L3/BE_BottomFin_L
+        weight: 1
+      - path: BN_Spine01/BN_Spine02/BN_BottomFin_R1
+        weight: 1
+      - path: BN_Spine01/BN_Spine02/BN_BottomFin_R1/BN_BottomFin_R2
+        weight: 1
+      - path: BN_Spine01/BN_Spine02/BN_BottomFin_R1/BN_BottomFin_R2/BN_BottomFin_R3
+        weight: 1
+      - path: BN_Spine01/BN_Spine02/BN_BottomFin_R1/BN_BottomFin_R2/BN_BottomFin_R3/BE_BottomFin_R
+        weight: 1
+      - path: BN_Spine01/BN_Spine02/BN_Spine03
+        weight: 1
+      - path: BN_Spine01/BN_Spine02/BN_Spine03/BN_Spine04
+        weight: 1
+      - path: BN_Spine01/BN_Spine02/BN_Spine03/BN_Spine04/BN_Spine05
+        weight: 1
+      - path: BN_Spine01/BN_Spine02/BN_Spine03/BN_Spine04/BN_Spine05/BN_Spine06
+        weight: 1
+      - path: BN_Spine01/BN_Spine02/BN_Spine03/BN_Spine04/BN_Spine05/BN_Spine06/BN_Spine07
+        weight: 1
+      - path: BN_Spine01/BN_Spine02/BN_Spine03/BN_Spine04/BN_Spine05/BN_Spine06/BN_Spine07/BN_Spine08
+        weight: 1
+      - path: BN_Spine01/BN_Spine02/BN_Spine03/BN_Spine04/BN_Spine05/BN_Spine06/BN_Spine07/BN_Spine08/BN_Spine09
+        weight: 1
+      - path: BN_Spine01/BN_Spine02/BN_Spine03/BN_Spine04/BN_Spine05/BN_Spine06/BN_Spine07/BN_Spine08/BN_Spine09/BN_Spine010
+        weight: 1
+      - path: BN_Spine01/BN_Spine02/BN_Spine03/BN_Spine04/BN_Spine05/BN_Spine06/BN_Spine07/BN_Spine08/BN_Spine09/BN_Spine010/BE_Spine
+        weight: 1
+      - path: ClownFish
+        weight: 1
+      - path: Point001
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 8
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: Point001
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
