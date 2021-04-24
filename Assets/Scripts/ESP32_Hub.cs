@@ -197,8 +197,7 @@ public class ESP32_Hub : MonoBehaviour
                     // we received some data from the device
                     _dataBytes = bytes;
                     //outputText.text = System.Text.Encoding.UTF8.GetString(_dataBytes, 0, _dataBytes.Length);
-                    if(collisionDetected)
-                        OnLED();
+                    OnLED();
                     //float qx = System.BitConverter.ToSingle(bytes, 0);
                     //float qy = System.BitConverter.ToSingle(bytes, 8);
                     //float qz = System.BitConverter.ToSingle(bytes, 4);
@@ -263,8 +262,7 @@ public class ESP32_Hub : MonoBehaviour
     private bool ledON = false;
     public void OnLED()
     {
-        ledON = !ledON;
-        if (ledON)
+        if (collisionDetected)
         {
             SendByte((byte)0x01);
         }
