@@ -262,14 +262,18 @@ public class ESP32_Hub : MonoBehaviour
     private bool ledON = false;
     public void OnLED()
     {
-        if (collisionDetected)
-        {
-            SendByte((byte)0x01);
-        }
-        else
-        {
-            SendByte((byte)0x00);
-        }
+        if (vibrateValue == lastByteSent)
+            return;
+        //if (collisionDetected)
+        //{
+        //    SendByte((byte)0x01);
+        //}
+        //else
+        //{
+        //    SendByte((byte)0x00);
+        //}
+        SendByte((byte)vibrateValue);
+        lastByteSent = vibrateValue;
     }
 
     string FullUUID(string uuid)
@@ -289,7 +293,7 @@ public class ESP32_Hub : MonoBehaviour
 
     void SendByte(byte value)
     {
-        byte[] data = new byte[] { value };
+        byte[] data = new byte[] { 0x01, value };
         BluetoothLEHardwareInterface.WriteCharacteristic(_deviceAddress, ServiceUUID, WriteCharacteristic, data, data.Length, true, (characteristicUUID) => {
 
             BluetoothLEHardwareInterface.Log("Write Succeeded");
@@ -297,8 +301,11 @@ public class ESP32_Hub : MonoBehaviour
     }
 
     private bool collisionDetected = false;
-    public void SetCollisionDetected(bool activate)
+    private int vibrateValue = 100;
+    private int lastByteSent = 100;
+    public void SetCollisionDetected(bool activate, int vibrateValue)
     {
         this.collisionDetected = activate;
+        this.vibrateValue = activate ? vibrateValue : 100;
     }
 }

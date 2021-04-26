@@ -6,10 +6,16 @@ public class EnterDetect : MonoBehaviour
 {
     public GameObject canvas;
     public GameObject bluetooth;
+    public GameObject clownfish;
+    public float detectionAnimateSpeed;
+    private Animator clownfishAnimator;
+    private AudioSource audioSource;
+    public int vibrateValue;
     // Start is called before the first frame update
     void Start()
     {
-        
+        audioSource = this.gameObject.GetComponent<AudioSource>();
+        clownfishAnimator = clownfish.GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -20,20 +26,23 @@ public class EnterDetect : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.name == "ClownFish")
+        if (other.gameObject.name == clownfish.name)
         {
-            canvas.SetActive(true);
-            bluetooth.GetComponent<ESP32_Hub>().SetCollisionDetected(true);
+            bluetooth.GetComponent<ESP32_Hub>().SetCollisionDetected(true, vibrateValue);
+            //canvas.SetActive(true);
+            clownfishAnimator.speed = detectionAnimateSpeed;
+            audioSource.Play();
         }
 
     }
 
     void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.name == "ClownFish")
+        if (other.gameObject.name == clownfish.name)
         {
-            canvas.SetActive(false);
-            bluetooth.GetComponent<ESP32_Hub>().SetCollisionDetected(false);
+            //canvas.SetActive(false);
+            clownfishAnimator.speed = 1.0f;
+            bluetooth.GetComponent<ESP32_Hub>().SetCollisionDetected(false, vibrateValue);
         }
     }
 }
