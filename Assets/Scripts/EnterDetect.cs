@@ -29,7 +29,7 @@ public class EnterDetect : MonoBehaviour
         if (other.gameObject.name == clownfish.name)
         {
             bluetooth.GetComponent<ESP32_Hub>().SetCollisionDetected(true, vibrateValue);
-            //canvas.SetActive(true);
+            canvas.SetActive(true);
             clownfishAnimator.speed = detectionAnimateSpeed;
             audioSource.Play();
         }
@@ -41,7 +41,7 @@ public class EnterDetect : MonoBehaviour
         if (other.gameObject.name == clownfish.name)
         {
             bluetooth.GetComponent<ESP32_Hub>().SetCollisionDetected(false, vibrateValue);
-            //canvas.SetActive(false);
+            canvas.SetActive(false);
             clownfishAnimator.speed = 1.0f;
         }
     }
