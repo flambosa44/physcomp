@@ -4,18 +4,20 @@ using UnityEngine;
 
 public class EnterDetect : MonoBehaviour
 {
-    public GameObject canvas;
+    public GameObject canvasGood;
+    public GameObject canvasBad;
     public GameObject bluetooth;
-    public GameObject clownfish;
+    public GameObject bluetooth2;
+    public GameObject animalHome;
     public float detectionAnimateSpeed;
-    private Animator clownfishAnimator;
-    private AudioSource audioSource;
+    private Animator animalAnimator;
+    private AudioSource[] audioSources;
     public int vibrateValue;
     // Start is called before the first frame update
     void Start()
     {
-        audioSource = this.gameObject.GetComponent<AudioSource>();
-        clownfishAnimator = clownfish.GetComponent<Animator>();
+        audioSources = this.gameObject.GetComponents<AudioSource>();
+        animalAnimator = this.gameObject.GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -26,23 +28,31 @@ public class EnterDetect : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.name == clownfish.name)
-        {
-            bluetooth.GetComponent<ESP32_Hub>().SetCollisionDetected(true, vibrateValue);
-            canvas.SetActive(true);
-            clownfishAnimator.speed = detectionAnimateSpeed;
-            audioSource.Play();
-        }
+        bool success = other.gameObject.name == animalHome.name;
+        bluetooth.GetComponent<ESP32_Hub>().SetCollisionDetected(true, success ? 255 : 0);
+        bluetooth2.GetComponent<ESP32_Hub>().SetCollisionDetected(true, success ? 255 : 0);
+        animalAnimator.speed = success ? 0.5f : 2.0f;
+        PlayAudio(other.gameObject.name == animalHome.name);
+        if(success)
+            canvasGood.SetActive(true);
+        else
+            canvasBad.SetActive(true);
 
     }
 
     void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.name == clownfish.name)
-        {
-            bluetooth.GetComponent<ESP32_Hub>().SetCollisionDetected(false, vibrateValue);
-            canvas.SetActive(false);
-            clownfishAnimator.speed = 1.0f;
-        }
+        bluetooth.GetComponent<ESP32_Hub>().SetCollisionDetected(false, vibrateValue);
+        bluetooth2.GetComponent<ESP32_Hub>().SetCollisionDetected(false, vibrateValue);
+        canvasGood.SetActive(false);
+        canvasBad.SetActive(false);
+        animalAnimator.speed = 1.0f;
+    }
+
+    void PlayAudio(bool success)
+    {
+        foreach (AudioSource source in audioSources)
+            source.Stop();
+        audioSources[success ? 0 : 1].Play();
     }
 }

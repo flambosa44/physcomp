@@ -5,10 +5,10 @@ using UnityEngine.UI;
 
 public class ESP32_Hub : MonoBehaviour
 {
-    public string DeviceName = "MyESP32";
-    public string ServiceUUID = "e578518e-5926-4ad6-82d0-f5fc6b243e85";
-    public string SubscribeCharacteristic = "e578518e-5926-4ad6-82d0-f5fc6b243e85";
-    public string WriteCharacteristic = "e578518e-5926-4ad6-82d0-f5fc6b243e85";
+    public string DeviceName;
+    public string ServiceUUID;
+    public string SubscribeCharacteristic;
+    public string WriteCharacteristic;
 
     enum States
     {
