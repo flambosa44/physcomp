@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <VuforiaUnityInfo version="7.0">
     <TargetSet version="5.0" toolVersion="2.8.0">
-        <CylinderTarget name="finger_sheath" version="3.0" targetId="09b0e9caaad6459b8572af018dacd57b" sideLength="0.045000" topDiameter="0.036000" bottomDiameter="0.036000" sideImage="finger_sheath.Body_scaled.jpg"/>
+        <CylinderTarget name="finger_sheath2" version="3.0" targetId="3c4de0b34fed4293ae0f966d05e99359" sideLength="0.033000" topDiameter="0.036000" bottomDiameter="0.036000" sideImage="finger_sheath2.Body_scaled.jpg"/>
     </TargetSet>
 </VuforiaUnityInfo>
