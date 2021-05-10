@@ -6,8 +6,7 @@ public class EnterDetect : MonoBehaviour
 {
     public GameObject canvasGood;
     public GameObject canvasBad;
-    public GameObject bluetooth;
-    public GameObject bluetooth2;
+    private ESP32 bluetooth;
     public GameObject animalHome;
     public float detectionAnimateSpeed;
     private Animator animalAnimator;
@@ -18,6 +17,7 @@ public class EnterDetect : MonoBehaviour
     {
         audioSources = this.gameObject.GetComponents<AudioSource>();
         animalAnimator = this.gameObject.GetComponent<Animator>();
+        bluetooth = GetComponentInChildren<ESP32>();
     }
 
     // Update is called once per frame
@@ -28,9 +28,10 @@ public class EnterDetect : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        if (Global.AnimalNonColliders.Contains(other.gameObject.name))
+            return;
         bool success = other.gameObject.name == animalHome.name;
-        bluetooth.GetComponent<ESP32_Hub>().SetCollisionDetected(true, success ? 255 : 0);
-        bluetooth2.GetComponent<ESP32_Hub>().SetCollisionDetected(true, success ? 255 : 0);
+        bluetooth.GetComponent<ESP32>().SetCollisionDetected(true, success ? 255 : 0);
         animalAnimator.speed = success ? 0.5f : 2.0f;
         PlayAudio(other.gameObject.name == animalHome.name);
         if(success)
@@ -42,8 +43,9 @@ public class EnterDetect : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-        bluetooth.GetComponent<ESP32_Hub>().SetCollisionDetected(false, vibrateValue);
-        bluetooth2.GetComponent<ESP32_Hub>().SetCollisionDetected(false, vibrateValue);
+        if (Global.AnimalNonColliders.Contains(other.gameObject.name))
+            return;
+        bluetooth.GetComponent<ESP32>().SetCollisionDetected(false, vibrateValue);
         canvasGood.SetActive(false);
         canvasBad.SetActive(false);
         animalAnimator.speed = 1.0f;
@@ -53,6 +55,6 @@ public class EnterDetect : MonoBehaviour
     {
         foreach (AudioSource source in audioSources)
             source.Stop();
-        audioSources[success ? 0 : 1].Play();
+        audioSources[success ? 1 : 0].Play();
     }
 }

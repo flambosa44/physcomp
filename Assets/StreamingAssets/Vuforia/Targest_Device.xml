@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <QCARConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="qcar_config.xsd">
   <Tracking>
+    <ImageTarget name="fiducial_2" size="0.098000 0.045057" />
     <ImageTarget name="IMG_0745" size="0.048000 0.093001" />
     <ImageTarget name="IMG_2" size="0.250000 0.331186" />
+    <CylinderTarget name="finger_sheath" sideLength="0.045000"/>
   </Tracking>
 </QCARConfig>

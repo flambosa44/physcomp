@@ -5,10 +5,10 @@ using UnityEngine.UI;
 
 public class ESP32_Hub : MonoBehaviour
 {
-    public string DeviceName;
-    public string ServiceUUID;
-    public string SubscribeCharacteristic;
-    public string WriteCharacteristic;
+    //public string DeviceName;
+    //public string ServiceUUID;
+    //public string SubscribeCharacteristic;
+    //public string WriteCharacteristic;
 
     enum States
     {
@@ -21,17 +21,19 @@ public class ESP32_Hub : MonoBehaviour
         Disconnect,
     }
 
-    private bool _connected = false;
-    private float _timeout = 0f;
-    private States _state = States.None;
-    private string _deviceAddress;
-    private bool _foundSubscribeID = false;
-    private bool _foundWriteID = false;
-    private byte[] _dataBytes = null;
-    private bool _rssiOnly = false;
-    private int _rssi = 0;
-    [SerializeField]
-    private UnityEngine.UI.Text stateText;
+    //private bool _connected = false;
+    //private float _timeout = 0f;
+    //private States _state = States.None;
+    //private string _deviceAddress;
+    //private bool _foundSubscribeID = false;
+    //private bool _foundWriteID = false;
+    //private byte[] _dataBytes = null;
+    //private bool _rssiOnly = false;
+    //private int _rssi = 0;
+    //public GameObject bluetooth;
+    private List<ESP32> devices = new List<ESP32>();
+    private Dictionary<string,ESP32> devicesDict = new Dictionary<string, ESP32>();
+    private List<string> deviceUUIDs = new List<string>();
     [SerializeField]
     private UnityEngine.UI.Text outputText;
     [SerializeField]
@@ -41,8 +43,12 @@ public class ESP32_Hub : MonoBehaviour
     [SerializeField]
     private GameObject cube;
     private Transform cubeTransform;
+    private bool processing = false;
+    private bool initialised = false;
+    private bool scanning = false;
+    private bool connecting = false;
 
-    //   [SerializeField]
+    //   [SerializeField]3
     //   private Transform cameraTransform;
     private Quaternion quatLookAtCam;
     private Quaternion rawQuat;
@@ -60,144 +66,200 @@ public class ESP32_Hub : MonoBehaviour
     }
 
 
-    void Reset()
+    //void Reset()
+    //{
+    //    _connected = false;
+    //    _timeout = 0f;
+    //    _state = States.None;
+    //    _deviceAddress = null;
+    //    _foundSubscribeID = false;
+    //    _foundWriteID = false;
+    //    _dataBytes = null;
+    //    _rssi = 0;
+    //}
+
+    //void SetState(States newState, float timeout)
+    //{
+    //    _state = newState;
+    //    _timeout = timeout;
+    //}
+
+void StartProcess()
     {
-        _connected = false;
-        _timeout = 0f;
-        _state = States.None;
-        _deviceAddress = null;
-        _foundSubscribeID = false;
-        _foundWriteID = false;
-        _dataBytes = null;
-        _rssi = 0;
-    }
+        //Reset();
+        foreach (ESP32 device in devices)
+        {
+            device.Reset();
+            deviceUUIDs.Add(device.ServiceUUID);
+        }
 
-    void SetState(States newState, float timeout)
-    {
-        _state = newState;
-        _timeout = timeout;
-    }
-
-    void StartProcess()
-    {
-        Reset();
-        BluetoothLEHardwareInterface.Initialize(true, false, () => {
-
-            SetState(States.Scan, 0.1f);
-
-        }, (error) => {
-            BluetoothLEHardwareInterface.Log("Error during initialize: " + error);
-        });
     }
 
     // Use this for initialization
     void Start()
     {
+        //foreach (Transform trans in this.gameObject.transform)
+        //    devices.Add(trans.gameObject.GetComponent<ESP32>());
+        devices.AddRange(FindObjectsOfType<ESP32>());
+        foreach (ESP32 device in devices)
+            devicesDict.Add(device.DeviceName, device);
+        //devices.Add(bluetooth.GetComponent<ESP32>());
         StartProcess();
+        StartCoroutine("Init");
         //cubeTransform = cube.GetComponent<Transform>();
         //quatLookAtCam = Quaternion.identity;
     }
 
-    void EvaluateBLEStates()
+    IEnumerator Init()
     {
-        switch (_state)
+        initialised = false;
+        BluetoothLEHardwareInterface.Initialize(true, false, () => {
+
+            foreach (ESP32 device in devices)
+            {
+                device.SetState(ESP32.States.Scan, 0.1f);
+                device.stateText.text = device.DeviceName + " " + device.State;
+            }
+            initialised = true;
+        }, (error) => {
+            BluetoothLEHardwareInterface.Log("Error during initialize: " + error);
+        });
+        while(!initialised)
         {
-            case States.None:
-                break;
+            yield return null;
+        }
+        StartCoroutine("Scan");
+    }
 
-            case States.Scan:
-                BluetoothLEHardwareInterface.ScanForPeripheralsWithServices(null, (address, name) => {
-                    //DeviceNameFoundedText.text += name + "\n";
+    IEnumerator Scan()
+    {
+        scanning = true;
+        BluetoothLEHardwareInterface.ScanForPeripheralsWithServices(null, (address, name) =>
+        {
+            //DeviceNameFoundedText.text += name + "\n";
+            // if your device does not advertise the rssi and manufacturer specific data
+            // then you must use this callback because the next callback only gets called
+            // if you have manufacturer specific data
+            //device.stateText.text += "\n" + name + " " + count2 + " " + device.cnt;
+            if (devicesDict.ContainsKey(name) && !devicesDict[name].Found)
+            {
+                ESP32 device = devicesDict[name];
+                device.Found = true;
+                device.Address = address;
+                device.SetState(ESP32.States.Connect, 0.5f);
+                int cntMissing = 0;
+                device.stateText.text = "NEW: " + device.DeviceName + " " + device.Address;
+                foreach (ESP32 dev in devices)
+                {
+                    if (!dev.Found)
+                        cntMissing++;
+                }
+                if (cntMissing == 0)
+                {
+                    BluetoothLEHardwareInterface.StopScan();
+                    scanning = false;
+                    connecting = true;
+                }
+                //BluetoothLEHardwareInterface.StopScan();
 
-                    // if your device does not advertise the rssi and manufacturer specific data
-                    // then you must use this callback because the next callback only gets called
-                    // if you have manufacturer specific data
+                // found a device with the name we want
+                // this example does not deal with finding more than one
 
-                    if (!_rssiOnly)
+                //device.SetState(ESP32.States.Connect, 0.5f);
+            }
+        }, null, false);
+
+        while(scanning)
+        {
+            yield return null;
+        }
+        scanText.text = "FINISHED SCANNING!";
+        StartCoroutine("Connect");
+    }
+
+    IEnumerator Connect()
+    {
+        foreach(ESP32 device in devices)
+        {
+            device.FoundSubscribeID = false;
+            device.FoundWriteID = false;
+
+            // note that the first parameter is the address, not the name. I have not fixed this because
+            // of backwards compatiblity.
+            // also note that I am note using the first 2 callbacks. If you are not looking for specific characteristics you can use one of
+            // the first 2, but keep in mind that the device will enumerate everything and so you will want to have a timeout
+            // large enough that it will be finished enumerating before you try to subscribe or do any other operations.
+            BluetoothLEHardwareInterface.ConnectToPeripheral(device.Address, null, null, (address, serviceUUID, characteristicUUID) =>
+            {
+                if (IsEqual(serviceUUID, device.ServiceUUID))
+                {
+                    device.FoundSubscribeID = device.FoundSubscribeID || IsEqual(characteristicUUID, device.ServiceUUID);
+                    device.FoundWriteID = device.FoundWriteID || IsEqual(characteristicUUID, device.ServiceUUID);
+
+                    // if we have found both characteristics that we are waiting for
+                    // set the state. make sure there is enough timeout that if the
+                    // device is still enumerating other characteristics it finishes
+                    // before we try to subscribe
+                    if (device.FoundSubscribeID)// && _foundWriteID)
                     {
-                        if (name.Contains(DeviceName))
-                        {
-                            BluetoothLEHardwareInterface.StopScan();
-
-                            // found a device with the name we want
-                            // this example does not deal with finding more than one
-                            _deviceAddress = address;
-                            SetState(States.Connect, 0.5f);
-                        }
+                        device.stateText.text = device.DeviceName + " CONNECTED!";
+                        device.SetState(ESP32.States.Subscribe, 2f);
+                        device.Connected = true;
                     }
+                }
+            });
+            while (!device.Connected)
+            {
+                yield return null;
+            }
+        }
+        scanText.text = "FINISHED CONNECTING!";
+        StartCoroutine("Run");
+    }
 
-                }, (address, name, rssi, bytes) => {
-
-                    // use this one if the device responses with manufacturer specific data and the rssi
-
-                    if (name.Contains(DeviceName))
+    // Update is called once per frame
+    IEnumerator Run()
+    {
+        while(true)
+        {
+            foreach (ESP32 device in devices)
+            {
+                if (device.Timeout > 0f)
+                {
+                    device.Timeout -= Time.deltaTime;
+                    if (device.Timeout <= 0f)
                     {
-                        if (_rssiOnly)
-                        {
-                            _rssi = rssi;
-                        }
-                        else
-                        {
-                            BluetoothLEHardwareInterface.StopScan();
-
-                            // found a device with the name we want
-                            // this example does not deal with finding more than one
-                            _deviceAddress = address;
-                            SetState(States.Connect, 0.5f);
-                        }
+                        device.Timeout = 0f;
+                        EvaluateBLEStates(device);
                     }
+                }
+            }
+            yield return null;
+        }
 
-                }, _rssiOnly); // this last setting allows RFduino to send RSSI without having manufacturer data
+    }
 
-                if (_rssiOnly)
-                    SetState(States.ScanRSSI, 0.5f);
+    int count = 0;
+    int count2 = 0;
+    void EvaluateBLEStates(ESP32 device)
+    {
+        switch (device.State)
+        {
+            case ESP32.States.None:
                 break;
 
-            case States.ScanRSSI:
-                break;
-
-            case States.Connect:
-                // set these flags
-                _foundSubscribeID = false;
-                _foundWriteID = false;
-
-                // note that the first parameter is the address, not the name. I have not fixed this because
-                // of backwards compatiblity.
-                // also note that I am note using the first 2 callbacks. If you are not looking for specific characteristics you can use one of
-                // the first 2, but keep in mind that the device will enumerate everything and so you will want to have a timeout
-                // large enough that it will be finished enumerating before you try to subscribe or do any other operations.
-                BluetoothLEHardwareInterface.ConnectToPeripheral(_deviceAddress, null, null, (address, serviceUUID, characteristicUUID) => {
-
-                    if (IsEqual(serviceUUID, ServiceUUID))
-                    {
-                        _foundSubscribeID = _foundSubscribeID || IsEqual(characteristicUUID, SubscribeCharacteristic);
-                        _foundWriteID = _foundWriteID || IsEqual(characteristicUUID, WriteCharacteristic);
-
-                        // if we have found both characteristics that we are waiting for
-                        // set the state. make sure there is enough timeout that if the
-                        // device is still enumerating other characteristics it finishes
-                        // before we try to subscribe
-                        if (_foundSubscribeID)// && _foundWriteID)
-                        {
-                            _connected = true;
-                            SetState(States.Subscribe, 2f);
-                        }
-                    }
-                });
-                break;
-
-            case States.Subscribe:
-                BluetoothLEHardwareInterface.SubscribeCharacteristicWithDeviceAddress(_deviceAddress, ServiceUUID, SubscribeCharacteristic, null, (address, characteristicUUID, bytes) => {
+            case ESP32.States.Subscribe:
+                BluetoothLEHardwareInterface.SubscribeCharacteristicWithDeviceAddress(device.Address, device.ServiceUUID, device.ServiceUUID, null, (address, characteristicUUID, bytes) => {
 
                     // we don't have a great way to set the state other than waiting until we actually got
                     // some data back. For this demo with the rfduino that means pressing the button
                     // on the rfduino at least once before the GUI will update.
-                    _state = States.None;
+                    device.State = ESP32.States.None;
 
                     // we received some data from the device
-                    _dataBytes = bytes;
+                    device.DataBytes = bytes;
                     //outputText.text = System.Text.Encoding.UTF8.GetString(_dataBytes, 0, _dataBytes.Length);
-                    OnLED();
+                    OnLED(device);
                     //float qx = System.BitConverter.ToSingle(bytes, 0);
                     //float qy = System.BitConverter.ToSingle(bytes, 8);
                     //float qz = System.BitConverter.ToSingle(bytes, 4);
@@ -213,19 +275,19 @@ public class ESP32_Hub : MonoBehaviour
                 });
                 break;
 
-            case States.Unsubscribe:
-                BluetoothLEHardwareInterface.UnSubscribeCharacteristic(_deviceAddress, ServiceUUID, SubscribeCharacteristic, null);
-                SetState(States.Disconnect, 4f);
+            case ESP32.States.Unsubscribe:
+                BluetoothLEHardwareInterface.UnSubscribeCharacteristic(device.Address, device.ServiceUUID, device.ServiceUUID, null);
+                device.SetState(ESP32.States.Disconnect, 4f);
                 break;
 
-            case States.Disconnect:
-                if (_connected)
+            case ESP32.States.Disconnect:
+                if (device.Connected)
                 {
-                    BluetoothLEHardwareInterface.DisconnectPeripheral(_deviceAddress, (address) => {
+                    BluetoothLEHardwareInterface.DisconnectPeripheral(device.Address, (address) => {
                         BluetoothLEHardwareInterface.DeInitialize(() => {
 
-                            _connected = false;
-                            _state = States.None;
+                            device.Connected = false;
+                            device.State = ESP32.States.None;
                         });
                     });
                 }
@@ -233,36 +295,26 @@ public class ESP32_Hub : MonoBehaviour
                 {
                     BluetoothLEHardwareInterface.DeInitialize(() => {
 
-                        _state = States.None;
+                        device.State = ESP32.States.None;
                     });
                 }
                 break;
         }
     }
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            resetQuat();
-        }
-        //stateText.text = _state.ToString();
-        if (_timeout > 0f)
-        {
-            _timeout -= Time.deltaTime;
-            if (_timeout <= 0f)
-            {
-                _timeout = 0f;
-
-                EvaluateBLEStates();
-            }
-        }
-    }
 
     private bool ledON = false;
-    public void OnLED()
+    public void OnLED(ESP32 device)
     {
-        if (vibrateValue == lastByteSent)
+        if(!device.IsReset)
+        {
+            device.VibrateValue = 100;
+            SendByte(device, 0x02, (byte)device.VibrateValue);
+            device.LastByteSent = device.VibrateValue;
+            device.IsReset = true;
+            return;
+
+        }
+        if (device.VibrateValue == device.LastByteSent)
             return;
         //if (collisionDetected)
         //{
@@ -272,8 +324,8 @@ public class ESP32_Hub : MonoBehaviour
         //{
         //    SendByte((byte)0x00);
         //}
-        SendByte((byte)vibrateValue);
-        lastByteSent = vibrateValue;
+        SendByte(device, 0x01,(byte)device.VibrateValue);
+        device.LastByteSent = device.VibrateValue;
     }
 
     string FullUUID(string uuid)
@@ -291,21 +343,19 @@ public class ESP32_Hub : MonoBehaviour
         return (uuid1.ToUpper().CompareTo(uuid2.ToUpper()) == 0);
     }
 
-    void SendByte(byte value)
+    void SendByte(ESP32 device, byte flag, byte value)
     {
-        byte[] data = new byte[] { 0x01, value };
-        BluetoothLEHardwareInterface.WriteCharacteristic(_deviceAddress, ServiceUUID, WriteCharacteristic, data, data.Length, true, (characteristicUUID) => {
+        byte[] data = new byte[] { flag, value };
+        BluetoothLEHardwareInterface.WriteCharacteristic(device.Address, device.ServiceUUID, device.ServiceUUID, data, data.Length, true, (characteristicUUID) => {
 
             BluetoothLEHardwareInterface.Log("Write Succeeded");
         });
     }
 
-    private bool collisionDetected = false;
-    private int vibrateValue = 100;
-    private int lastByteSent = 100;
-    public void SetCollisionDetected(bool activate, int vibrateValue)
-    {
-        this.collisionDetected = activate;
-        this.vibrateValue = activate ? vibrateValue : 100;
-    }
+    //private bool collisionDetected = false;
+    //public void SetCollisionDetected(bool activate, int vibrateValue)
+    //{
+    //    this.collisionDetected = activate;
+    //    device.VibrateValue = activate ? vibrateValue : 100;
+    //}
 }
