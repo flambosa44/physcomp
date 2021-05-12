@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <VuforiaUnityInfo version="7.0">
     <TargetSet version="5.0" toolVersion="2.8.0">
-        <CylinderTarget name="finger_sheath2" version="3.0" targetId="3c4de0b34fed4293ae0f966d05e99359" sideLength="0.033000" topDiameter="0.036000" bottomDiameter="0.036000" sideImage="finger_sheath2.Body_scaled.jpg"/>
+        <CylinderTarget name="sheath_stones3_low_small" version="3.0" targetId="bb9c7209d9ce435fb53c3c2b317881d9" sideLength="0.045000" topDiameter="0.036000" bottomDiameter="0.036000" sideImage="sheath_stones3_low_small.Body_scaled.jpg"/>
+        <CylinderTarget name="sheath_stones3_low_big" version="3.0" targetId="6efd343b9d8d45c0aad1fe681dbcf7a7" sideLength="0.045000" topDiameter="0.036000" bottomDiameter="0.036000" sideImage="sheath_stones3_low_big.Body_scaled.jpg"/>
+        <CylinderTarget name="sheath_stones3_high_small" version="3.0" targetId="61732625957b461cba465a02657a5cca" sideLength="0.045000" topDiameter="0.036000" bottomDiameter="0.036000" sideImage="sheath_stones3_high_small.Body_scaled.jpg"/>
+        <CylinderTarget name="sheath_stones3_high_big" version="3.0" targetId="9cd901b60b29437a8923990d4ac62b94" sideLength="0.045000" topDiameter="0.036000" bottomDiameter="0.036000" sideImage="sheath_stones3_high_big.Body_scaled.jpg"/>
     </TargetSet>
 </VuforiaUnityInfo>

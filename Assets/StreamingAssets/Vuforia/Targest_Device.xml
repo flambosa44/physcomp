@@ -1,8 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<QCARConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="qcar_config.xsd">
-  <Tracking>
-    <ImageTarget name="fid_1" size="0.076000 0.076000" />
-    <ImageTarget name="IMG_0745" size="0.048000 0.093001" />
-    <CylinderTarget name="finger_sheath2" sideLength="0.033000"/>
-  </Tracking>
+<QCARConfig>
+    <Tracking>
+        <CylinderTarget name="sheath_stones3_low_small" sideLength="0.045000"/>
+        <CylinderTarget name="sheath_stones3_low_big" sideLength="0.045000"/>
+        <CylinderTarget name="sheath_stones3_high_small" sideLength="0.045000"/>
+        <CylinderTarget name="sheath_stones3_high_big" sideLength="0.045000"/>
+        <ImageTarget name="fid_1" size="0.076000 0.076000"/>
+        <ImageTarget name="IMG_0745" size="0.048000 0.093001"/>
+        <ImageTarget name="cube_clownfish.Top" size="0.050000 0.050000"/>
+        <ImageTarget name="cube_clownfish.Back" size="0.050000 0.050000"/>
+        <ImageTarget name="cube_clownfish.Left" size="0.050000 0.050000"/>
+        <ImageTarget name="cube_clownfish.Right" size="0.050000 0.050000"/>
+        <ImageTarget name="cube_clownfish.Front" size="0.050000 0.050000"/>
+        <MultiTarget name="cube_clownfish">
+            <Part name="cube_clownfish.Left" translation="-0.02500000037252903 0 0" rotation="AD: 0 1 0 -90"/>
+            <Part name="cube_clownfish.Right" translation="0.02500000037252903 0 0" rotation="AD: 0 1 0 90"/>
+            <Part name="cube_clownfish.Front" translation="0 0 0.02500000037252903" rotation="AD: 1 0 0 0"/>
+            <Part name="cube_clownfish.Back" translation="0 0 -0.02500000037252903" rotation="AD: 0 1 0 180"/>
+            <Part name="cube_clownfish.Top" translation="0 0.02500000037252903 0" rotation="AD: 1 0 0 -90"/>
+        </MultiTarget>
+    </Tracking>
 </QCARConfig>
