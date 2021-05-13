@@ -141,6 +141,7 @@ void StartProcess()
             // then you must use this callback because the next callback only gets called
             // if you have manufacturer specific data
             //device.stateText.text += "\n" + name + " " + count2 + " " + device.cnt;
+            scanText.text += "\n" + name;
             if (devicesDict.ContainsKey(name) && !devicesDict[name].Found)
             {
                 ESP32 device = devicesDict[name];

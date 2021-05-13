@@ -55,6 +55,6 @@ public class EnterDetect : MonoBehaviour
     {
         foreach (AudioSource source in audioSources)
             source.Stop();
-        audioSources[success ? 1 : 0].Play();
+        audioSources[success ? 0 : 1].Play();
     }
 }
