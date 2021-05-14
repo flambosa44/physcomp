@@ -1,0 +1,160 @@
+fileFormatVersion: 2
+guid: 7bfbc34afe6d32e48ad523a11a41a2a4
+timeCreated: 1509829398
+licenseType: Store
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: ButterFlyFish_16
+    100004: speckled-butterflyfish_000
+    100006: speckled-butterflyfish_001
+    100008: speckled-butterflyfish_002
+    100010: speckled-butterflyfish_003
+    100012: speckled-butterflyfish_004
+    100014: speckled-butterflyfish_005
+    100016: speckled-butterflyfish_006
+    100018: speckled-butterflyfish_007
+    100020: speckled-butterflyfish_008
+    100022: speckled-butterflyfish_009
+    100024: speckled-butterflyfish_010
+    400000: //RootNode
+    400002: ButterFlyFish_16
+    400004: speckled-butterflyfish_000
+    400006: speckled-butterflyfish_001
+    400008: speckled-butterflyfish_002
+    400010: speckled-butterflyfish_003
+    400012: speckled-butterflyfish_004
+    400014: speckled-butterflyfish_005
+    400016: speckled-butterflyfish_006
+    400018: speckled-butterflyfish_007
+    400020: speckled-butterflyfish_008
+    400022: speckled-butterflyfish_009
+    400024: speckled-butterflyfish_010
+    4300000: ButterFlyFish_16
+    7400000: Take 001
+    9500000: //RootNode
+    11100000: //RootNode
+    13700000: ButterFlyFish_16
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Take 001
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 38
+      wrapMode: 2
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: ButterFlyFish_16
+        weight: 1
+      - path: speckled-butterflyfish_000
+        weight: 1
+      - path: speckled-butterflyfish_000/speckled-butterflyfish_001
+        weight: 1
+      - path: speckled-butterflyfish_000/speckled-butterflyfish_001/speckled-butterflyfish_002
+        weight: 1
+      - path: speckled-butterflyfish_000/speckled-butterflyfish_003
+        weight: 1
+      - path: speckled-butterflyfish_000/speckled-butterflyfish_003/speckled-butterflyfish_004
+        weight: 1
+      - path: speckled-butterflyfish_000/speckled-butterflyfish_005
+        weight: 1
+      - path: speckled-butterflyfish_000/speckled-butterflyfish_005/speckled-butterflyfish_006
+        weight: 1
+      - path: speckled-butterflyfish_000/speckled-butterflyfish_007
+        weight: 1
+      - path: speckled-butterflyfish_000/speckled-butterflyfish_007/speckled-butterflyfish_008
+        weight: 1
+      - path: speckled-butterflyfish_000/speckled-butterflyfish_009
+        weight: 1
+      - path: speckled-butterflyfish_000/speckled-butterflyfish_009/speckled-butterflyfish_010
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 1
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 1
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

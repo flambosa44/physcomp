@@ -1,0 +1,160 @@
+fileFormatVersion: 2
+guid: 4c66f0d3d35363e4d9f6985231a147b6
+timeCreated: 1509822498
+licenseType: Store
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: bone_TearDrop_01
+    100002: bone_TearDrop_02
+    100004: bone_TearDrop_03
+    100006: bone_TearDrop_04
+    100008: bone_TearDrop_05
+    100010: bone_TearDrop_06
+    100012: bone_TearDrop_07
+    100014: bone_TearDrop_08
+    100016: bone_TearDrop_09
+    100018: bone_TearDrop_10
+    100020: bone_TearDrop_11
+    100022: ButterFlyFish_02
+    100024: //RootNode
+    400000: bone_TearDrop_01
+    400002: bone_TearDrop_02
+    400004: bone_TearDrop_03
+    400006: bone_TearDrop_04
+    400008: bone_TearDrop_05
+    400010: bone_TearDrop_06
+    400012: bone_TearDrop_07
+    400014: bone_TearDrop_08
+    400016: bone_TearDrop_09
+    400018: bone_TearDrop_10
+    400020: bone_TearDrop_11
+    400022: ButterFlyFish_02
+    400024: //RootNode
+    4300000: ButterFlyFish_02
+    7400000: Take 001
+    9500000: //RootNode
+    11100000: //RootNode
+    13700000: ButterFlyFish_02
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 2
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Take 001
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 38
+      wrapMode: 2
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: bone_TearDrop_03
+        weight: 1
+      - path: bone_TearDrop_03/bone_TearDrop_02
+        weight: 1
+      - path: bone_TearDrop_03/bone_TearDrop_02/bone_TearDrop_01
+        weight: 1
+      - path: bone_TearDrop_03/bone_TearDrop_05
+        weight: 1
+      - path: bone_TearDrop_03/bone_TearDrop_05/bone_TearDrop_04
+        weight: 1
+      - path: bone_TearDrop_03/bone_TearDrop_07
+        weight: 1
+      - path: bone_TearDrop_03/bone_TearDrop_07/bone_TearDrop_06
+        weight: 1
+      - path: bone_TearDrop_03/bone_TearDrop_08
+        weight: 1
+      - path: bone_TearDrop_03/bone_TearDrop_08/bone_TearDrop_09
+        weight: 1
+      - path: bone_TearDrop_03/bone_TearDrop_10
+        weight: 1
+      - path: bone_TearDrop_03/bone_TearDrop_10/bone_TearDrop_11
+        weight: 1
+      - path: ButterFlyFish_02
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 1
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 1
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

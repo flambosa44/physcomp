@@ -1,0 +1,160 @@
+fileFormatVersion: 2
+guid: cf9ce9f38f4a3674e873b2579e136218
+timeCreated: 1509829398
+licenseType: Store
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: ButterFlyFish_14
+    100004: Ornate_Bone_01
+    100006: Ornate_Bone_02
+    100008: Ornate_Bone_03
+    100010: Ornate_Bone_04
+    100012: Ornate_Bone_05
+    100014: Ornate_Bone_06
+    100016: Ornate_Bone_07
+    100018: Ornate_Bone_08
+    100020: Ornate_Bone_09
+    100022: Ornate_Bone_10
+    100024: PolypButterflyfis_Bone_11
+    400000: //RootNode
+    400002: ButterFlyFish_14
+    400004: Ornate_Bone_01
+    400006: Ornate_Bone_02
+    400008: Ornate_Bone_03
+    400010: Ornate_Bone_04
+    400012: Ornate_Bone_05
+    400014: Ornate_Bone_06
+    400016: Ornate_Bone_07
+    400018: Ornate_Bone_08
+    400020: Ornate_Bone_09
+    400022: Ornate_Bone_10
+    400024: PolypButterflyfis_Bone_11
+    4300000: ButterFlyFish_14
+    7400000: Take 001
+    9500000: //RootNode
+    11100000: //RootNode
+    13700000: ButterFlyFish_14
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Take 001
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 38
+      wrapMode: 2
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: ButterFlyFish_14
+        weight: 1
+      - path: Ornate_Bone_01
+        weight: 1
+      - path: Ornate_Bone_01/Ornate_Bone_02
+        weight: 1
+      - path: Ornate_Bone_01/Ornate_Bone_02/Ornate_Bone_03
+        weight: 1
+      - path: Ornate_Bone_01/Ornate_Bone_04
+        weight: 1
+      - path: Ornate_Bone_01/Ornate_Bone_04/Ornate_Bone_05
+        weight: 1
+      - path: Ornate_Bone_01/Ornate_Bone_06
+        weight: 1
+      - path: Ornate_Bone_01/Ornate_Bone_06/Ornate_Bone_07
+        weight: 1
+      - path: Ornate_Bone_01/Ornate_Bone_08
+        weight: 1
+      - path: Ornate_Bone_01/Ornate_Bone_08/Ornate_Bone_09
+        weight: 1
+      - path: Ornate_Bone_01/Ornate_Bone_10
+        weight: 1
+      - path: Ornate_Bone_01/Ornate_Bone_10/PolypButterflyfis_Bone_11
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 1
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 1
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

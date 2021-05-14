@@ -10,6 +10,7 @@ public class EnterDetect : MonoBehaviour
     public GameObject animalHome;
     public float detectionAnimateSpeed;
     private Animator animalAnimator;
+    private Animation animalAnimation;
     private AudioSource[] audioSources;
     public int vibrateValue;
     // Start is called before the first frame update
@@ -17,6 +18,7 @@ public class EnterDetect : MonoBehaviour
     {
         audioSources = this.gameObject.GetComponents<AudioSource>();
         animalAnimator = this.gameObject.GetComponent<Animator>();
+        animalAnimation = this.gameObject.GetComponent<Animation>();
         bluetooth = GetComponentInChildren<ESP32>();
     }
 
@@ -32,7 +34,7 @@ public class EnterDetect : MonoBehaviour
             return;
         bool success = other.gameObject.name == animalHome.name;
         bluetooth.GetComponent<ESP32>().SetCollisionDetected(true, success ? 255 : 0);
-        animalAnimator.speed = success ? 0.5f : 2.0f;
+        UpdateAnimation(success ? 0.5f : 2.0f);
         PlayAudio(other.gameObject.name == animalHome.name);
         if(success)
             canvasGood.SetActive(true);
@@ -48,7 +50,7 @@ public class EnterDetect : MonoBehaviour
         bluetooth.GetComponent<ESP32>().SetCollisionDetected(false, vibrateValue);
         canvasGood.SetActive(false);
         canvasBad.SetActive(false);
-        animalAnimator.speed = 1.0f;
+        UpdateAnimation(1.0f);
     }
 
     void PlayAudio(bool success)
@@ -56,5 +58,13 @@ public class EnterDetect : MonoBehaviour
         foreach (AudioSource source in audioSources)
             source.Stop();
         audioSources[success ? 0 : 1].Play();
+    }
+
+    void UpdateAnimation(float speed)
+    {
+        if (animalAnimator != null)
+            animalAnimator.speed = speed;
+        else if (animalAnimation != null)
+            animalAnimation[animalAnimation.clip.name].speed = speed;
     }
 }
