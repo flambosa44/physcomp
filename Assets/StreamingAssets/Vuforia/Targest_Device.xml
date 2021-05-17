@@ -5,6 +5,7 @@
         <CylinderTarget name="sheath_stones3_low_big" sideLength="0.045000"/>
         <CylinderTarget name="sheath_stones3_high_small" sideLength="0.045000"/>
         <CylinderTarget name="sheath_stones3_high_big" sideLength="0.045000"/>
+        <ImageTarget name="stones3_high_big" size="0.108000 0.042955"/>
         <ImageTarget name="fid_1" size="0.076000 0.076000"/>
         <ImageTarget name="IMG_0745" size="0.048000 0.093001"/>
         <ImageTarget name="cube_clownfish.Top" size="0.050000 0.050000"/>
