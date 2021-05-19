@@ -33,16 +33,16 @@ MonoBehaviour:
     viewerManufacturer: Google
     useCustomViewer: 0
     customViewer:
-      Version: 0
-      Name: 
-      Manufacturer: 
+      Version: 1
+      Name: Carl
+      Manufacturer: Carl
       ButtonType: 0
-      ScreenToLensDistance: 0
-      InterLensDistance: 0
+      ScreenToLensDistance: 0.037
+      InterLensDistance: 0.062
       TrayAlignment: 0
-      LensCenterToTrayDistance: 0
-      DistortionCoefficients: {x: 0, y: 0}
-      FieldOfView: {x: 0, y: 0, z: 0, w: 0}
+      LensCenterToTrayDistance: 0.035
+      DistortionCoefficients: {x: 0.1, y: 1}
+      FieldOfView: {x: 50, y: 50, z: 50, w: 50}
       ContainsMagnet: 0
   database:
     disableModelExtraction: 0
