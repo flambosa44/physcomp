@@ -15,8 +15,8 @@ public class ESP32 : MonoBehaviour
     private byte[] dataBytes = null;
     private bool rssiOnly = false;
     private int rssi = 0;
-    private int vibrateValue = 100;
-    private int lastByteSent = 100;
+    private int vibrateValue = 255;
+    private int lastByteSent = 255;
     public UnityEngine.UI.Text stateText;
     private bool found = false;
     private bool reset = false;

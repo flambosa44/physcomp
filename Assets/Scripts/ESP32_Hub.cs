@@ -308,7 +308,7 @@ void StartProcess()
     {
         if(!device.IsReset)
         {
-            device.VibrateValue = 100;
+            device.VibrateValue = 255;
             SendByte(device, 0x02, (byte)device.VibrateValue);
             device.LastByteSent = device.VibrateValue;
             device.IsReset = true;
@@ -325,6 +325,7 @@ void StartProcess()
         //{
         //    SendByte((byte)0x00);
         //}
+        device.stateText.text = "sending:" + device.VibrateValue;
         SendByte(device, 0x01,(byte)device.VibrateValue);
         device.LastByteSent = device.VibrateValue;
     }
