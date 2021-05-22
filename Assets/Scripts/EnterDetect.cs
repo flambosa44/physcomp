@@ -7,6 +7,7 @@ public class EnterDetect : MonoBehaviour
 {
     public GameObject canvasGood;
     public GameObject canvasBad;
+    public GameObject touchpool;
     private GameObject activeCanvas = null;
     private ESP32 bluetooth;
     public GameObject animalHome;
@@ -19,7 +20,8 @@ public class EnterDetect : MonoBehaviour
     private bool nearHome, detached, nearEnemyHome, canvasRunning;
     private bool initiated = false;
     private Transform homeTrans, animalTrans;
-    private Vector3 localPos, localRot;
+    private Vector3 localPos;
+    private Quaternion localRot;
     // Start is called before the first frame update
 
     public bool NearEnemyHome
@@ -105,32 +107,33 @@ public class EnterDetect : MonoBehaviour
 
     IEnumerator AttackCoroutine()
     {
-        UpdateAnimation(2.0f);
-        float speed = 0.1f;
+        UpdateAnimation(4.0f);
+        float moveSpeed = 0.5f, rotateSpeed = 100;
         EnterDetect enemyScript = enemyFish.GetComponent<EnterDetect>();
         PosTest.UpdateStatus("Starting Attack, NearEnemyHome = " + enemyScript.NearEnemyHome);
-        Vector3 pos, rot, enemyPos, targetRot;
-        Vector3 originalPos, originalRot;
-        bool finishedMove, finishedRot, finished;
+        Vector3 pos, enemyPos, originalPos, targetRot;
+        Quaternion rot, originalRot;
+        bool finishedMove, finishedRot, finishedReturn, finishedSettle = false, finished;
         while (enemyScript.NearEnemyHome)
         {
             pos = this.gameObject.transform.position;
-            rot = this.gameObject.transform.rotation.eulerAngles;
+            rot = this.gameObject.transform.rotation;
             enemyPos = enemyFish.transform.position;
-            targetRot = enemyPos - pos;
+            targetRot = (enemyPos - pos).normalized;
 
             PosTest.vOrigin = this.gameObject.transform.parent.transform.TransformPoint(localPos);
-            PosTest.rOrigin = this.gameObject.transform.parent.transform.TransformDirection(localRot);
+            PosTest.rOrigin = (this.gameObject.transform.parent.rotation * localRot).eulerAngles;
             PosTest.vClown = pos;
-            PosTest.rClown = rot;
+            PosTest.rClown = rot.eulerAngles;
             PosTest.vButt = enemyPos;
             PosTest.rButt = targetRot;
             PosTest.vDiff = targetRot;
+            PosTest.rDiff = targetRot;
 
-            if (Vector3.Distance(pos, enemyPos) > 0.001f)
-                this.gameObject.transform.position = Vector3.MoveTowards(pos, enemyPos, speed * Time.deltaTime);
-            if (Vector3.Distance(rot, targetRot) > 0.001f)
-                this.gameObject.transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(rot, targetRot, speed * Time.deltaTime, 0.0f));
+            if (Vector3.Distance(pos, enemyPos) > 0.01f)
+                this.gameObject.transform.position = Vector3.MoveTowards(pos, enemyPos, moveSpeed * Time.deltaTime);
+            if (Vector3.Distance(rot.eulerAngles, targetRot) > 1.0f && Vector3.Distance(pos, enemyPos) > 0.1f)
+                this.gameObject.transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(rot.eulerAngles, targetRot, rotateSpeed * Time.deltaTime, 2.0f));
             yield return null;
         }
 
@@ -138,28 +141,50 @@ public class EnterDetect : MonoBehaviour
         do
         {
             originalPos = this.gameObject.transform.parent.transform.TransformPoint(localPos);
-            originalRot = this.gameObject.transform.parent.transform.TransformDirection(localRot);
+            originalRot = this.gameObject.transform.parent.rotation * localRot;
             pos = this.gameObject.transform.position;
-            rot = this.gameObject.transform.rotation.eulerAngles;
-            finishedMove = Vector3.Distance(originalPos, pos) <= 0.001f;
-            finishedRot = Vector3.Distance(originalRot, rot) <= 0.001f;
-            finished = finishedMove && finishedRot;
+            rot = this.gameObject.transform.rotation;
+            finishedMove = Vector3.Distance(originalPos, pos) <= 0.01f;
+            targetRot = (originalPos - pos).normalized;
+            finishedRot = Vector3.Distance(targetRot, rot.eulerAngles) <= 1.0f || Vector3.Distance(originalPos, pos) <= 0.1f;
+            finishedSettle = finishedMove && Vector3.Distance(originalRot.eulerAngles, rot.eulerAngles) <= 1f;
 
             PosTest.vOrigin = originalPos;
-            PosTest.rOrigin = originalRot;
+            PosTest.rOrigin = originalRot.eulerAngles;
             PosTest.vClown = pos;
-            PosTest.rClown = rot;
+            PosTest.rClown = rot.eulerAngles;
             PosTest.vButt = new Vector3();
-            PosTest.rButt = new Vector3();
+            PosTest.rButt = targetRot;
             PosTest.vDiff = originalPos - pos;
 
             if (!finishedMove)
-                this.gameObject.transform.position = Vector3.MoveTowards(pos, originalPos, speed * Time.deltaTime);
-            //if(!finishedRot)
-            //    this.gameObject.transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(rot, originalRot, speed * Time.deltaTime, 0.0f));
+            {
+                this.gameObject.transform.position = Vector3.MoveTowards(pos, originalPos, moveSpeed * Time.deltaTime);
+                if (!finishedRot)
+                    this.gameObject.transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(rot.eulerAngles, targetRot, rotateSpeed * Time.deltaTime, 2.0f));
+                PosTest.UpdateStatus("finishedMove = " + finishedMove + "\nfinishedRot = " + finishedRot);
+            }
+            else if (finishedMove && !finishedSettle)
+            {
+                PosTest.UpdateStatus("In Settle");
+                //this.gameObject.transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(rot, originalRot, 10 * Time.deltaTime, 3f));
+                //this.gameObject.transform.rotation = Quaternion.RotateTowards(this.gameObject.transform.rotation, (this.gameObject.transform.parent.rotation * localRot), 10 * Time.deltaTime);
+                this.gameObject.transform.rotation = Quaternion.RotateTowards(rot, originalRot, 50 * Time.deltaTime);
+                finishedSettle = Vector3.Distance(originalRot.eulerAngles, rot.eulerAngles) <= 1f;
+                if (finishedSettle)
+                    break;
+            }
+            ////else if (finishedMove)
+            ////{
+            ////    this.gameObject.transform.rotation = (this.gameObject.transform.parent.rotation * localRot);
+            ////    finishedSettle = true;
+            ////    break;
+            ////}
+                
+
             yield return null;
         }
-        while (!finishedMove);
+        while (!finishedSettle);
         UpdateAnimation(0.5f);
         PosTest.UpdateStatus(this.gameObject.name + " Finished Attack");
     }
@@ -212,15 +237,16 @@ public class EnterDetect : MonoBehaviour
 
     private void Detach()
     {
+        PosTest.rClown = this.gameObject.transform.eulerAngles;
         this.detached = true;
         GameObject vuforiaTarget = this.gameObject.transform.parent.gameObject;
-        this.gameObject.transform.SetParent(animalHome.transform);
+        this.gameObject.transform.SetParent(touchpool.transform);
         //vuforiaTarget.SetActive(false);
         Global.PossibleAnimalHomes.Remove(animalHome.name);
         localPos = this.gameObject.transform.localPosition;
-        localRot = this.gameObject.transform.localRotation.eulerAngles;
+        localRot = this.gameObject.transform.localRotation;
         PosTest.UpdateStatus(this.gameObject.name + " Detached!");
-        StartCoroutine(CanvasHandler(canvasGood, 20.0f));
+        StartCoroutine(CanvasHandler(canvasGood, 5.0f));
     }
 
     void OnTriggerExit(Collider other)

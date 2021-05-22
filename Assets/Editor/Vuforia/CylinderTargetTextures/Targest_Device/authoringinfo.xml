@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <VuforiaUnityInfo version="7.0">
     <TargetSet version="5.0" toolVersion="2.8.0">
+        <CylinderTarget name="cylinder_butterflyfish" version="3.0" targetId="aec366baff1e4523bca6b23a7bccd5e0" sideLength="0.049000" topDiameter="0.050000" bottomDiameter="0.050000" sideImage="cylinder_butterflyfish.Body_scaled.jpg" topImage="cylinder_butterflyfish.Top_scaled.jpg"/>
         <CylinderTarget name="cylinder_fish" version="3.0" targetId="1729a878889f4c189b1eae902c493836" sideLength="0.049000" topDiameter="0.050000" bottomDiameter="0.050000" sideImage="cylinder_fish.Body_scaled.jpg" topImage="cylinder_fish.Top_scaled.jpg"/>
         <CylinderTarget name="sheath_stones3_low_small" version="3.0" targetId="bb9c7209d9ce435fb53c3c2b317881d9" sideLength="0.045000" topDiameter="0.036000" bottomDiameter="0.036000" sideImage="sheath_stones3_low_small.Body_scaled.jpg"/>
         <CylinderTarget name="sheath_stones3_low_big" version="3.0" targetId="6efd343b9d8d45c0aad1fe681dbcf7a7" sideLength="0.045000" topDiameter="0.036000" bottomDiameter="0.036000" sideImage="sheath_stones3_low_big.Body_scaled.jpg"/>
