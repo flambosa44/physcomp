@@ -31,18 +31,18 @@ MonoBehaviour:
     seeThroughConfiguration: 0
     viewerName: Cardboard v1
     viewerManufacturer: Google
-    useCustomViewer: 0
+    useCustomViewer: 1
     customViewer:
       Version: 1
       Name: Carl
       Manufacturer: Carl
       ButtonType: 0
-      ScreenToLensDistance: 0.037
-      InterLensDistance: 0.062
+      ScreenToLensDistance: 0.04
+      InterLensDistance: 0.07
       TrayAlignment: 0
       LensCenterToTrayDistance: 0.035
-      DistortionCoefficients: {x: 0.1, y: 1}
-      FieldOfView: {x: 50, y: 50, z: 50, w: 50}
+      DistortionCoefficients: {x: 0.1, y: 0.1}
+      FieldOfView: {x: 100, y: 100, z: 100, w: 100}
       ContainsMagnet: 0
   database:
     disableModelExtraction: 0
