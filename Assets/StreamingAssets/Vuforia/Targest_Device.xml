@@ -11,22 +11,46 @@
         <ImageTarget name="stones3_high_big" size="0.108000 0.042955"/>
         <ImageTarget name="fid_1" size="0.076000 0.076000"/>
         <ImageTarget name="IMG_0745" size="0.048000 0.093001"/>
-        <ImageTarget name="cuboid_touchpool.Back" size="0.240000 0.240000"/>
-        <ImageTarget name="cuboid_touchpool.Left" size="0.240000 0.240000"/>
-        <ImageTarget name="cuboid_touchpool.Front" size="0.240000 0.240000"/>
-        <ImageTarget name="cuboid_touchpool.Right" size="0.240000 0.240000"/>
-        <ImageTarget name="cuboid_touchpool.Top" size="0.240000 0.240000"/>
-        <ImageTarget name="cube_clownfish.Back" size="0.050000 0.050084"/>
+        <ImageTarget name="cuboid_touchpool.Left" size="0.200000 0.200000"/>
+        <ImageTarget name="cuboid_touchpool.Back" size="0.200000 0.200000"/>
+        <ImageTarget name="cuboid_touchpool.Top" size="0.200000 0.200000"/>
+        <ImageTarget name="cuboid_touchpool.Right" size="0.200000 0.200000"/>
+        <ImageTarget name="cuboid_touchpool.Front" size="0.200000 0.200000"/>
+        <ImageTarget name="cuboid_woodchips.Left" size="0.050000 0.050000"/>
+        <ImageTarget name="cuboid_woodchips.Back" size="0.050000 0.050000"/>
+        <ImageTarget name="cuboid_woodchips.Top" size="0.050000 0.050000"/>
+        <ImageTarget name="cuboid_woodchips.Right" size="0.050000 0.050000"/>
+        <ImageTarget name="cuboid_woodchips.Front" size="0.050000 0.050000"/>
+        <ImageTarget name="cuboid_tarmac.Left" size="0.050000 0.050158"/>
+        <ImageTarget name="cuboid_tarmac.Back" size="0.050000 0.050000"/>
+        <ImageTarget name="cuboid_tarmac.Top" size="0.050000 0.050000"/>
+        <ImageTarget name="cuboid_tarmac.Right" size="0.050000 0.050158"/>
+        <ImageTarget name="cuboid_tarmac.Front" size="0.050000 0.050158"/>
         <ImageTarget name="cube_clownfish.Left" size="0.050000 0.050000"/>
-        <ImageTarget name="cube_clownfish.Front" size="0.050000 0.050084"/>
-        <ImageTarget name="cube_clownfish.Right" size="0.050000 0.049916"/>
+        <ImageTarget name="cube_clownfish.Back" size="0.050000 0.050084"/>
         <ImageTarget name="cube_clownfish.Top" size="0.050000 0.049916"/>
+        <ImageTarget name="cube_clownfish.Right" size="0.050000 0.049916"/>
+        <ImageTarget name="cube_clownfish.Front" size="0.050000 0.050084"/>
         <MultiTarget name="cuboid_touchpool">
-            <Part name="cuboid_touchpool.Left" translation="-0.11999999731779099 0 0" rotation="AD: 0 1 0 -90"/>
-            <Part name="cuboid_touchpool.Right" translation="0.11999999731779099 0 0" rotation="AD: 0 1 0 90"/>
-            <Part name="cuboid_touchpool.Front" translation="0 0 0.11999999731779099" rotation="AD: 1 0 0 0"/>
-            <Part name="cuboid_touchpool.Back" translation="0 0 -0.11999999731779099" rotation="AD: 0 1 0 180"/>
-            <Part name="cuboid_touchpool.Top" translation="0 0.11999999731779099 0" rotation="AD: 1 0 0 -90"/>
+            <Part name="cuboid_touchpool.Left" translation="0.5075 0 0" rotation="AD: 0 1 0 -90"/>
+            <Part name="cuboid_touchpool.Right" translation="-0.5075 0 0" rotation="AD: 0 1 0 90"/>
+            <Part name="cuboid_touchpool.Front" translation="0 0 -0.504" rotation="AD: 1 0 0 0"/>
+            <Part name="cuboid_touchpool.Back" translation="0 0 0.504" rotation="AD: 0 1 0 180"/>
+            <Part name="cuboid_touchpool.Top" translation="0 -0.119 0" rotation="AD: 1 0 0 -90"/>
+        </MultiTarget>
+        <MultiTarget name="cuboid_woodchips">
+            <Part name="cuboid_woodchips.Left" translation="-0.02500000037252903 0 0" rotation="AD: 0 1 0 -90"/>
+            <Part name="cuboid_woodchips.Right" translation="0.02500000037252903 0 0" rotation="AD: 0 1 0 90"/>
+            <Part name="cuboid_woodchips.Front" translation="0 0 0.02500000037252903" rotation="AD: 1 0 0 0"/>
+            <Part name="cuboid_woodchips.Back" translation="0 0 -0.02500000037252903" rotation="AD: 0 1 0 180"/>
+            <Part name="cuboid_woodchips.Top" translation="0 0.02500000037252903 0" rotation="AD: 1 0 0 -90"/>
+        </MultiTarget>
+        <MultiTarget name="cuboid_tarmac">
+            <Part name="cuboid_tarmac.Left" translation="-0.02500000037252903 0 0" rotation="AD: 0 1 0 -90"/>
+            <Part name="cuboid_tarmac.Right" translation="0.02500000037252903 0 0" rotation="AD: 0 1 0 90"/>
+            <Part name="cuboid_tarmac.Front" translation="0 0 0.02500000037252903" rotation="AD: 1 0 0 0"/>
+            <Part name="cuboid_tarmac.Back" translation="0 0 -0.02500000037252903" rotation="AD: 0 1 0 180"/>
+            <Part name="cuboid_tarmac.Top" translation="0 0.02500000037252903 0" rotation="AD: 1 0 0 -90"/>
         </MultiTarget>
         <MultiTarget name="cube_clownfish">
             <Part name="cube_clownfish.Left" translation="-0.02500000037252903 0 0" rotation="AD: 0 1 0 -90"/>

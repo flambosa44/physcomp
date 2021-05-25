@@ -17,14 +17,14 @@ MonoBehaviour:
     ufoLicenseKey: QVJ6NFhHbi8vLy8vQUFBQUtKOUdjRU8zNmtyem1FY2cvQmlWaHBndWY0Qmx5M0J4WDF6M0pWRmJzZmJnSHdJd0FpQUpiWFM5cG0reVh5Q0dqbFhPSVh5QzAxNURkdnBhWlFjOVg2c1pVODZTT3grRHBPRWxmOFBoM3FQZG1PVkxtOEJDbC8wS2NlODVsREsySG4wTDdadTNKa1RQQ2ZpYUtOQ2k1ZHRKZUl3dXJwNm5wcDJabHJoaVpGVjlBaGcxUDNUK2VodVBQT3I3eEdqQjBQTjR6VGxFUEJZTXpWWnBpaUp0c2g0VjNzL085MjkyT1RiT21oaE9vbjVIeHgzdHZCaytKZlh3R1lXcDdpbUllMnRlQXhnSE5BMDQ2dXRlQTZUaW9BaVhLbDErZUR0VDRBTFVBanJkSHIxYjhyVmQ5UzRZam96VEdnclJsK25TbEwzWHhIaXpEUXRxeVRNTUUzUVB5QVFCdVF5cm5QSXpnWVJWRUtMN2p5Y0w=
     delayedInitialization: 0
     cameraDeviceModeSetting: -1
-    maxSimultaneousImageTargets: 4
+    maxSimultaneousImageTargets: 12
     maxSimultaneousObjectTargets: 1
     useDelayedLoadingObjectTargets: 0
     modelTargetRecoWhileExtendedTracked: 1
     version: 8.3.8
     eulaAcceptedVersions: '{"Values":["9.8","0.0","8.3"]}'
   digitalEyewear:
-    cameraOffset: 0.06
+    cameraOffset: 0.054
     distortionRenderingLayer: 31
     eyewearType: 2
     stereoFramework: 0
@@ -38,11 +38,11 @@ MonoBehaviour:
       Manufacturer: Carl
       ButtonType: 0
       ScreenToLensDistance: 0.04
-      InterLensDistance: 0.07
+      InterLensDistance: 0.66
       TrayAlignment: 0
       LensCenterToTrayDistance: 0.035
       DistortionCoefficients: {x: 0.1, y: 0.1}
-      FieldOfView: {x: 100, y: 100, z: 100, w: 100}
+      FieldOfView: {x: 50, y: 50, z: 50, w: 50}
       ContainsMagnet: 0
   database:
     disableModelExtraction: 0
