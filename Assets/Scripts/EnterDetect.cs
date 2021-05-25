@@ -6,7 +6,14 @@ using TMPro;
 public class EnterDetect : MonoBehaviour
 {
     public GameObject canvasGood;
+    public AudioClip audioRightHome;
     public GameObject canvasBad;
+    public AudioClip audioBegin;
+    public AudioClip audioSettled;
+    public AudioClip audioWrongHome;
+    public AudioClip audioEnemyPresent;
+    private Feedback Begin, RightHome, WrongHome, Settled, EnemyPresent;
+    private List<Feedback> AllFeedback;
     public GameObject touchpool;
     private GameObject activeCanvas = null;
     private ESP32 bluetooth;
@@ -15,7 +22,7 @@ public class EnterDetect : MonoBehaviour
     public float detectionAnimateSpeed;
     private Animator animalAnimator;
     private Animation animalAnimation;
-    private AudioSource[] audioSources;
+    private AudioSource audioSource;
     public int vibrateValue;
     private bool nearHome, detached, nearEnemyHome, canvasRunning;
     private bool initiated = false;
@@ -41,13 +48,13 @@ public class EnterDetect : MonoBehaviour
         this.initiated = true;
         Start();
         bluetooth.SetCollisionDetected(true, vibrateValue);
-        canvasBad.GetComponentInChildren<TextMeshProUGUI>().text = "Try to match the " + this.gameObject.name + " with its symbiotic coral";
-        StartCoroutine(CanvasHandler(canvasBad, 5.0f));
+        //StartCoroutine(CanvasHandler(canvasBad, 5.0f));
+        UpdateFeedback(Begin);
     }
 
     void Start()
     {
-        audioSources = this.gameObject.GetComponents<AudioSource>();
+        audioSource = this.gameObject.GetComponent<AudioSource>();
         animalAnimator = this.gameObject.GetComponent<Animator>();
         animalAnimation = this.gameObject.GetComponent<Animation>();
         bluetooth = GetComponentInChildren<ESP32>();
@@ -55,6 +62,12 @@ public class EnterDetect : MonoBehaviour
         detached = false;
         animalHome = null;
         animalTrans = this.gameObject.transform;
+        Begin = new Feedback(canvasBad, audioBegin, "Try to match the " + this.gameObject.name + " with its symbiotic coral", true, 5.0f, audioSource);
+        RightHome = new Feedback(canvasBad, audioRightHome, "Good job! This Sea Anemone is safe to use, now place the " + this.gameObject.name + " inside", true, 5.0f, audioSource);
+        WrongHome = new Feedback(canvasBad, audioWrongHome, "Oh no! This isn't a Sea Anemone. Try to place the " + this.gameObject.name + " in a Sea Anemone.", true, 5.0f, audioSource);
+        Settled = new Feedback(canvasGood, audioSettled, null, false, 10.0f, audioSource);
+        EnemyPresent = new Feedback(canvasBad, audioEnemyPresent, "Oh no, the butterflyfish can't go here. The clownfish is protecting the sea anemone!", true, 5.0f, audioSource);
+        AllFeedback = new List<Feedback>() { Begin, RightHome, WrongHome, Settled, EnemyPresent };
 
     }
 
@@ -71,7 +84,6 @@ public class EnterDetect : MonoBehaviour
         bool success = Global.PossibleAnimalHomes.ContainsKey(other.gameObject.name);
         bluetooth.SetCollisionDetected(true, success ? 255 : 0);
         UpdateAnimation(success ? 0.5f : 2.0f);
-        PlayAudio(success);
         //PosTest.UpdateStatus("Enter Trigger");
         if (success)
         {
@@ -79,8 +91,9 @@ public class EnterDetect : MonoBehaviour
             nearHome = true;
             animalHome = Global.PossibleAnimalHomes[other.gameObject.name];
             homeTrans = animalHome.transform;
+            UpdateFeedback(RightHome);
             StartCoroutine("SettleIn");
-            canvasBad.GetComponentInChildren<TextMeshProUGUI>().text = "Good job! This Sea Anemone is safe to use, now place the " + this.gameObject.name + " inside";
+            //canvasBad.GetComponentInChildren<TextMeshProUGUI>().text = "Good job! This Sea Anemone is safe to use, now place the " + this.gameObject.name + " inside";
         }
         else
         {
@@ -89,15 +102,17 @@ public class EnterDetect : MonoBehaviour
             {
                 nearEnemyHome = true;
                 enemyFish.GetComponent<EnterDetect>().Attack();
-                canvasBad.GetComponentInChildren<TextMeshProUGUI>().text = "Oh no, the butterflyfish can't go here. The clownfish is protecting the sea anemone!";
+                UpdateFeedback(EnemyPresent);
+                //canvasBad.GetComponentInChildren<TextMeshProUGUI>().text = "Oh no, the butterflyfish can't go here. The clownfish is protecting the sea anemone!";
             }
             else
             {
-                canvasBad.GetComponentInChildren<TextMeshProUGUI>().text = "Oh no! This isn't a Sea Anemone. Try to place the " + this.gameObject.name + " in a Sea Anemone.";
-                
+                UpdateFeedback(WrongHome);
+                //canvasBad.GetComponentInChildren<TextMeshProUGUI>().text = "Oh no! This isn't a Sea Anemone. Try to place the " + this.gameObject.name + " in a Sea Anemone.";
+
             }
         }
-        StartCoroutine(CanvasHandler(canvasBad, 5.0f));
+        //StartCoroutine(CanvasHandler(canvasBad, 5.0f));
     }
 
     public void Attack()
@@ -246,7 +261,8 @@ public class EnterDetect : MonoBehaviour
         localPos = this.gameObject.transform.localPosition;
         localRot = this.gameObject.transform.localRotation;
         PosTest.UpdateStatus(this.gameObject.name + " Detached!");
-        StartCoroutine(CanvasHandler(canvasGood, 5.0f));
+        UpdateFeedback(Settled);
+        //StartCoroutine(CanvasHandler(canvasGood, 5.0f));
     }
 
     void OnTriggerExit(Collider other)
@@ -286,9 +302,16 @@ public class EnterDetect : MonoBehaviour
 
     void PlayAudio(bool success)
     {
-        foreach (AudioSource source in audioSources)
-            source.Stop();
-        audioSources[success ? 0 : 1].Play();
+        //foreach (AudioSource source in audioSources)
+        //    source.Stop();
+        //audioSources[success ? 0 : 1].Play();
+    }
+
+    void UpdateFeedback(Feedback target)
+    {
+        foreach (Feedback feedback in AllFeedback)
+            feedback.Deactivate();
+        target.Activate(this);
     }
 
     void UpdateAnimation(float speed)
@@ -297,5 +320,58 @@ public class EnterDetect : MonoBehaviour
             animalAnimator.speed = speed;
         else if (animalAnimation != null)
             animalAnimation[animalAnimation.clip.name].speed = speed;
+    }
+
+    public class Feedback
+    {
+        public GameObject canvas;
+        public TextMeshProUGUI textMesh;
+        public AudioClip audioClip;
+        public string text;
+        public bool textUpdateable;
+        public float lifeCycle;
+        public AudioSource audio;
+
+        public Feedback(GameObject canvas, AudioClip audioClip, string text, bool textUpdateable, float lifeCycle, AudioSource audio)
+        {
+            this.canvas = canvas;
+            this.audioClip = audioClip;
+            this.textMesh = canvas.GetComponentInChildren<TextMeshProUGUI>();
+            this.text = text;
+            this.textUpdateable = textUpdateable;
+            this.lifeCycle = lifeCycle;
+            this.audio = audio;
+        }
+
+        public void Activate(EnterDetect enterDetect)
+        {
+            if (textUpdateable && !string.IsNullOrEmpty(text))
+                this.textMesh.text = text;
+            this.canvas.SetActive(true);
+            this.audio.clip = this.audioClip;
+            if(this.audio.clip != null)
+                audio.Play();
+            enterDetect.StartCoroutine(this.FeedbackLifecycle());
+
+        }
+
+        IEnumerator FeedbackLifecycle()
+        {
+            float time = 0f;
+            while (time <= this.lifeCycle)
+            {
+                time += Time.deltaTime;
+                yield return null;
+            }
+            this.Deactivate();
+        }
+
+        public void Deactivate()
+        {
+            if (this.audio.isPlaying)
+                this.audio.Stop();
+            if(this.canvas.activeSelf)
+                this.canvas.SetActive(false);
+        }
     }
 }
