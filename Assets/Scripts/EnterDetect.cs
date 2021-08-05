@@ -347,11 +347,11 @@ public class EnterDetect : MonoBehaviour
         {
             if (textUpdateable && !string.IsNullOrEmpty(text))
                 this.textMesh.text = text;
-            this.canvas.SetActive(true);
+            //this.canvas.SetActive(true);
             this.audio.clip = this.audioClip;
             if(this.audio.clip != null)
                 audio.Play();
-            enterDetect.StartCoroutine(this.FeedbackLifecycle());
+            //enterDetect.StartCoroutine(this.FeedbackLifecycle());
 
         }
 
@@ -368,8 +368,8 @@ public class EnterDetect : MonoBehaviour
 
         public void Deactivate()
         {
-            if (this.audio.isPlaying)
-                this.audio.Stop();
+            //if (this.audio.isPlaying)
+            //    this.audio.Stop();
             if(this.canvas.activeSelf)
                 this.canvas.SetActive(false);
         }

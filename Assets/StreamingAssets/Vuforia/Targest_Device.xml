@@ -34,8 +34,8 @@
         <MultiTarget name="cuboid_touchpool">
             <Part name="cuboid_touchpool.Left" translation="0.5075 0 0" rotation="AD: 0 1 0 -90"/>
             <Part name="cuboid_touchpool.Right" translation="-0.5075 0 0" rotation="AD: 0 1 0 90"/>
-            <Part name="cuboid_touchpool.Front" translation="0 0 -0.504" rotation="AD: 1 0 0 0"/>
-            <Part name="cuboid_touchpool.Back" translation="0 0 0.504" rotation="AD: 0 1 0 180"/>
+            <Part name="cuboid_touchpool.Front" translation="0 0 -0.509" rotation="AD: 1 0 0 0"/>
+            <Part name="cuboid_touchpool.Back" translation="0 0 0.509" rotation="AD: 0 1 0 180"/>
             <Part name="cuboid_touchpool.Top" translation="0 -0.119 0" rotation="AD: 1 0 0 -90"/>
         </MultiTarget>
         <MultiTarget name="cuboid_woodchips">
