@@ -15,6 +15,8 @@ public class EnterDetect : MonoBehaviour
     private Feedback Begin, RightHome, WrongHome, Settled, EnemyPresent;
     private List<Feedback> AllFeedback;
     public GameObject touchpool;
+    private Water waterScript;
+    private Water.IxGuides guide;
     private GameObject activeCanvas = null;
     private ESP32 bluetooth;
     public GameObject animalHome;
@@ -27,8 +29,10 @@ public class EnterDetect : MonoBehaviour
     private bool nearHome, detached, nearEnemyHome, canvasRunning;
     private bool initiated = false;
     private Transform homeTrans, animalTrans;
-    private Vector3 localPos;
+    private Vector3 localPos, originalScale;
     private Quaternion localRot;
+    private float calmAnimSpeed = 0.75f;
+    private static bool clownfishGhostEvent = false;
     // Start is called before the first frame update
 
     public bool NearEnemyHome
@@ -54,6 +58,8 @@ public class EnterDetect : MonoBehaviour
 
     void Start()
     {
+        waterScript = touchpool.GetComponentInChildren<Water>();
+        guide = waterScript.guide;
         audioSource = this.gameObject.GetComponent<AudioSource>();
         animalAnimator = this.gameObject.GetComponent<Animator>();
         animalAnimation = this.gameObject.GetComponent<Animation>();
@@ -62,6 +68,7 @@ public class EnterDetect : MonoBehaviour
         detached = false;
         animalHome = null;
         animalTrans = this.gameObject.transform;
+        originalScale = animalTrans.localScale;
         Begin = new Feedback(canvasBad, audioBegin, "Try to match the " + this.gameObject.name + " with its symbiotic coral", true, 5.0f, audioSource);
         RightHome = new Feedback(canvasBad, audioRightHome, "Good job! This Sea Anemone is safe to use, now place the " + this.gameObject.name + " inside", true, 5.0f, audioSource);
         WrongHome = new Feedback(canvasBad, audioWrongHome, "Oh no! This isn't a Sea Anemone. Try to place the " + this.gameObject.name + " in a Sea Anemone.", true, 5.0f, audioSource);
@@ -74,16 +81,17 @@ public class EnterDetect : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        Debug.Log($"{this.gameObject.name} buzz = {bluetooth.BuzzValue}");
     }
 
     void OnTriggerEnter(Collider other)
     {
         if (detached || Global.AnimalNonColliders.Contains(other.gameObject.name))
             return;
+        waterScript.audioPaused = true;
         bool success = Global.PossibleAnimalHomes.ContainsKey(other.gameObject.name);
         bluetooth.SetCollisionDetected(true, success ? 255 : 0);
-        UpdateAnimation(success ? 0.5f : 2.0f);
+        UpdateAnimation(success ? calmAnimSpeed : 2.0f);
         //PosTest.UpdateStatus("Enter Trigger");
         if (success)
         {
@@ -200,7 +208,7 @@ public class EnterDetect : MonoBehaviour
             yield return null;
         }
         while (!finishedSettle);
-        UpdateAnimation(0.5f);
+        UpdateAnimation(calmAnimSpeed);
         PosTest.UpdateStatus(this.gameObject.name + " Finished Attack");
     }
 
@@ -213,33 +221,123 @@ public class EnterDetect : MonoBehaviour
         Vector3 deltaPos = animalPos - homePos;
         Vector3 deltaRot = animalRot - homeRot;
         Vector3 tempDeltaPos, tempDeltaRot;
-        float[] posTolerances = { 0.07f, 0.07f, 0.07f };
+        float maxDistance = deltaPos.magnitude, time = 0, currentDistance;
+        float[] posTolerances = { 0.02f, 0.02f, 0.02f };
         float[] rotTolerances = { 3f, 3f, 3f };
-        while (nearHome)
+        bool notDetached = true;
+        while (nearHome && notDetached)
         {
-            yield return new WaitForSecondsRealtime(3f);
-            if (!nearHome)
-                break;
+            //yield return new WaitForSecondsRealtime(3f);
+            //if (!nearHome)
+            //    break;
+
+            float settleDistance = 0.07f, ratio, transitionRatio = 0.5f, restDuration = 3.0f;
             animalPos = animalTrans.position;
             homePos = homeTrans.position;
             animalRot = animalTrans.rotation.eulerAngles;
             homeRot = homeTrans.rotation.eulerAngles;
             tempDeltaPos = animalPos - homePos;
             tempDeltaRot = animalRot - homeRot;
-
-            if (AreSimilar(deltaPos, tempDeltaPos, posTolerances) && AreSimilar(tempDeltaRot, deltaRot, rotTolerances))
+            currentDistance = tempDeltaPos.magnitude;
+            switch(guide)
             {
-                Detach();
-                break;
+                case Water.IxGuides.ghost:
+                    UpdateAnimation(currentDistance * calmAnimSpeed / maxDistance);
+                    if (!clownfishGhostEvent && !waterScript.clownfishGhost.activeSelf)
+                    {
+                        waterScript.clownfishGhost.SetActive(true);
+                        clownfishGhostEvent = true;
+                    }
+                    break;
+                case Water.IxGuides.trimodal:
+                    ratio = FishSwim.Lerp(0,maxDistance, transitionRatio, 1,currentDistance);
+                    UpdateAnimation(calmAnimSpeed*ratio);
+                    bluetooth.BuzzValue = 255 - Mathf.RoundToInt(130.0f * ratio);
+                    //Debug.Log($"Outside settle, dist = {currentDistance} | buzz = {bluetooth.BuzzValue}");
+                    break;
+                case Water.IxGuides.enviro:
+                    break;
+                default:
+                    break;
             }
-
-            else
+            
+            while(currentDistance <= settleDistance)
             {
-                deltaPos = animalPos - homePos;
-                deltaRot = animalRot - homeRot;
+                time += Time.deltaTime;
+                if(time >= restDuration)
+                {
+                    Detach();
+                    notDetached = false;
+                    break;
+                }
+                else
+                {
+                    deltaPos = animalTrans.position - homeTrans.position;
+                    deltaRot = animalTrans.rotation.eulerAngles - homeTrans.rotation.eulerAngles;
+
+                    if (AreSimilar(deltaPos, tempDeltaPos, posTolerances) && AreSimilar(tempDeltaRot, deltaRot, rotTolerances))
+                    {
+                        switch (guide)
+                        {
+                            case Water.IxGuides.ghost:
+                                animalTrans.localScale = originalScale * FishSwim.Lerp(0, restDuration, 1, 1.5f, time);
+                                break;
+                            case Water.IxGuides.trimodal:
+                                ratio = FishSwim.Lerp(0, restDuration, transitionRatio, 0, time);
+                                UpdateAnimation(calmAnimSpeed * ratio < 0.1f ? 0.1f : calmAnimSpeed * ratio);
+                                bluetooth.BuzzValue = 255 - Mathf.RoundToInt(130.0f * ratio);
+                                //Debug.Log($"Inside settle, dist = {currentDistance} | buzz = {bluetooth.BuzzValue}");
+                                break;
+                            case Water.IxGuides.enviro:
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        tempDeltaPos = animalTrans.position - homeTrans.position;
+                        tempDeltaRot = animalTrans.rotation.eulerAngles - homeTrans.rotation.eulerAngles;
+                        time = 0;
+                        switch (guide)
+                        {
+                            case Water.IxGuides.ghost:
+                                animalTrans.localScale = originalScale;
+                                break;
+                            case Water.IxGuides.trimodal:
+                                UpdateAnimation(calmAnimSpeed * transitionRatio);
+                                bluetooth.BuzzValue = 255 - Mathf.RoundToInt(130.0f * transitionRatio);
+                                break;
+                            case Water.IxGuides.enviro:
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+                yield return null;
+                currentDistance = (animalTrans.position - homeTrans.position).magnitude;
+                if (!nearHome || currentDistance > settleDistance)
+                {
+                    switch (guide)
+                    {
+                        case Water.IxGuides.ghost:
+                            animalTrans.localScale = originalScale;
+                            break;
+                        case Water.IxGuides.trimodal:
+                            break;
+                        case Water.IxGuides.enviro:
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                }
+                    
             }
             yield return null;
         }
+        waterScript.audioPaused = false;
     }
 
     private bool AreSimilar(Vector3 vec1, Vector3 vec2, float[] tolerances)
@@ -267,7 +365,7 @@ public class EnterDetect : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-
+        
         if (detached || Global.AnimalNonColliders.Contains(other.gameObject.name))
             return;
         //PosTest.UpdateStatus("Exit Trigger");
@@ -282,6 +380,7 @@ public class EnterDetect : MonoBehaviour
             animalHome = null;
             homeTrans = null;
         }
+        waterScript.audioPaused = false;
     }
 
     IEnumerator CanvasHandler(GameObject activeCanvas, float canvasLifespan)
@@ -348,9 +447,11 @@ public class EnterDetect : MonoBehaviour
             if (textUpdateable && !string.IsNullOrEmpty(text))
                 this.textMesh.text = text;
             //this.canvas.SetActive(true);
-            this.audio.clip = this.audioClip;
-            if(this.audio.clip != null)
-                audio.Play();
+
+            //this.audio.clip = this.audioClip;
+            //if(this.audio.clip != null)
+            //    audio.Play();
+
             //enterDetect.StartCoroutine(this.FeedbackLifecycle());
 
         }

@@ -47,6 +47,7 @@ public class ESP32_Hub : MonoBehaviour
     private bool initialised = false;
     private bool scanning = false;
     private bool connecting = false;
+    public GameObject clownfish;
 
     //   [SerializeField]3
     //   private Transform cameraTransform;
@@ -100,7 +101,9 @@ void StartProcess()
     {
         //foreach (Transform trans in this.gameObject.transform)
         //    devices.Add(trans.gameObject.GetComponent<ESP32>());
-        devices.AddRange(FindObjectsOfType<ESP32>());
+
+        //devices.AddRange(FindObjectsOfType<ESP32>());
+        devices.Add(clownfish.GetComponent<ESP32>());
         foreach (ESP32 device in devices)
             devicesDict.Add(device.DeviceName, device);
         //devices.Add(bluetooth.GetComponent<ESP32>());
@@ -309,13 +312,14 @@ void StartProcess()
         if(!device.IsReset)
         {
             device.VibrateValue = 255;
-            SendByte(device, 0x02, (byte)device.VibrateValue);
-            device.LastByteSent = device.VibrateValue;
+            device.BuzzValue = 255;
+            SendByte(device, 0x02, (byte)device.VibrateValue, (byte)device.BuzzValue);
+            device.UpdateHistory();
             device.IsReset = true;
             return;
 
         }
-        if (device.VibrateValue == device.LastByteSent)
+        if (!device.hasChanged)
             return;
         //if (collisionDetected)
         //{
@@ -326,8 +330,8 @@ void StartProcess()
         //    SendByte((byte)0x00);
         //}
         device.stateText.text = "sending:" + device.VibrateValue;
-        SendByte(device, 0x01,(byte)device.VibrateValue);
-        device.LastByteSent = device.VibrateValue;
+        SendByte(device, 0x01,(byte)device.VibrateValue, (byte)device.BuzzValue);
+        device.UpdateHistory();
     }
 
     string FullUUID(string uuid)
@@ -345,9 +349,9 @@ void StartProcess()
         return (uuid1.ToUpper().CompareTo(uuid2.ToUpper()) == 0);
     }
 
-    void SendByte(ESP32 device, byte flag, byte value)
+    void SendByte(ESP32 device, byte flag, byte vibValue, byte buzzValue)
     {
-        byte[] data = new byte[] { flag, value };
+        byte[] data = new byte[] { flag, vibValue, buzzValue };
         BluetoothLEHardwareInterface.WriteCharacteristic(device.Address, device.ServiceUUID, device.ServiceUUID, data, data.Length, true, (characteristicUUID) => {
 
             BluetoothLEHardwareInterface.Log("Write Succeeded");

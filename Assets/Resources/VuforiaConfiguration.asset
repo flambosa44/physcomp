@@ -26,7 +26,7 @@ MonoBehaviour:
   digitalEyewear:
     cameraOffset: 0.054
     distortionRenderingLayer: 31
-    eyewearType: 0
+    eyewearType: 2
     stereoFramework: 0
     seeThroughConfiguration: 0
     viewerName: Cardboard v1
@@ -67,5 +67,5 @@ MonoBehaviour:
     autoStartTracker: 0
   webcam:
     deviceNameSetInEditor: 
-    turnOffWebCam: 0
+    turnOffWebCam: 1
     renderTextureLayer: 30

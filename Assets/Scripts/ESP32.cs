@@ -16,7 +16,9 @@ public class ESP32 : MonoBehaviour
     private bool rssiOnly = false;
     private int rssi = 0;
     private int vibrateValue = 255;
-    private int lastByteSent = 255;
+    private int buzzValue = 255;
+    private int lastVibValue = 255;
+    private int lastBuzzValue = 255;
     public UnityEngine.UI.Text stateText;
     private bool found = false;
     private bool reset = false;
@@ -81,8 +83,19 @@ public class ESP32 : MonoBehaviour
     public int VibrateValue
     { get { return this.vibrateValue; } set { this.vibrateValue = value; } }
 
-    public int LastByteSent
-    { get { return this.lastByteSent; } set { this.lastByteSent = value; } }
+    public int BuzzValue
+    { get { return this.buzzValue; } set { this.buzzValue = value; } }
+
+    public bool hasChanged
+    {
+        get
+        {
+            return this.lastVibValue != this.vibrateValue || this.lastBuzzValue != this.buzzValue;
+        }
+    }
+
+    //public int LastByteSent
+    //{ get { return this.lastByteSent; } set { this.lastByteSent = value; } }
 
     public void Reset()
     {
@@ -103,9 +116,16 @@ public class ESP32 : MonoBehaviour
         this.timeout = timeout;
     }
 
-    public void SetCollisionDetected(bool activate, int vibrateValue)
+    public void UpdateHistory()
+    {
+        this.lastVibValue = this.vibrateValue;
+        this.lastBuzzValue = this.BuzzValue;
+    }
+
+    public void SetCollisionDetected(bool activate, int vibrateValue, int buzzValue = -1)
     {
         this.vibrateValue = activate ? vibrateValue : 100;
+        this.buzzValue = buzzValue >= 0 ? buzzValue : this.vibrateValue;
     }
 
     public enum States
