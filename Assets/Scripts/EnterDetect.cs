@@ -31,8 +31,10 @@ public class EnterDetect : MonoBehaviour
     private Transform homeTrans, animalTrans;
     private Vector3 localPos, originalScale;
     private Quaternion localRot;
-    private float calmAnimSpeed = 0.75f;
+    public static float calmAnimSpeed = 0.75f;
     private static bool clownfishGhostEvent = false;
+    private bool continueTrimodal = false;
+    private float transitionRatio;
     // Start is called before the first frame update
 
     public bool NearEnemyHome
@@ -58,6 +60,7 @@ public class EnterDetect : MonoBehaviour
 
     void Start()
     {
+        transitionRatio = continueTrimodal ? 0.5f : 0.1f;
         waterScript = touchpool.GetComponentInChildren<Water>();
         guide = waterScript.guide;
         audioSource = this.gameObject.GetComponent<AudioSource>();
@@ -81,14 +84,18 @@ public class EnterDetect : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log($"{this.gameObject.name} buzz = {bluetooth.BuzzValue}");
+        //Debug.Log($"{this.gameObject.name} buzz = {bluetooth.BuzzValue}");
     }
 
     void OnTriggerEnter(Collider other)
     {
         if (detached || Global.AnimalNonColliders.Contains(other.gameObject.name))
             return;
-        waterScript.audioPaused = true;
+        //waterScript.audioPaused = true;
+
+        Water.Effect effect = waterScript.effectGOs[other.gameObject];
+
+
         bool success = Global.PossibleAnimalHomes.ContainsKey(other.gameObject.name);
         bluetooth.SetCollisionDetected(true, success ? 255 : 0);
         UpdateAnimation(success ? calmAnimSpeed : 2.0f);
@@ -99,7 +106,7 @@ public class EnterDetect : MonoBehaviour
             nearHome = true;
             animalHome = Global.PossibleAnimalHomes[other.gameObject.name];
             homeTrans = animalHome.transform;
-            UpdateFeedback(RightHome);
+            UpdateFeedback(RightHome, effect.hasFired);
             StartCoroutine("SettleIn");
             //canvasBad.GetComponentInChildren<TextMeshProUGUI>().text = "Good job! This Sea Anemone is safe to use, now place the " + this.gameObject.name + " inside";
         }
@@ -110,17 +117,20 @@ public class EnterDetect : MonoBehaviour
             {
                 nearEnemyHome = true;
                 enemyFish.GetComponent<EnterDetect>().Attack();
-                UpdateFeedback(EnemyPresent);
+                UpdateFeedback(EnemyPresent, effect.hasFired);
                 //canvasBad.GetComponentInChildren<TextMeshProUGUI>().text = "Oh no, the butterflyfish can't go here. The clownfish is protecting the sea anemone!";
             }
             else
             {
-                UpdateFeedback(WrongHome);
+                //Debug.Log("WRONG HOME = " + other.gameObject.name);
+                UpdateFeedback(WrongHome, effect.hasFired);
                 //canvasBad.GetComponentInChildren<TextMeshProUGUI>().text = "Oh no! This isn't a Sea Anemone. Try to place the " + this.gameObject.name + " in a Sea Anemone.";
 
             }
         }
         //StartCoroutine(CanvasHandler(canvasBad, 5.0f));
+        if (!effect.hasFired)
+            effect.hasFired = true;
     }
 
     public void Attack()
@@ -155,8 +165,8 @@ public class EnterDetect : MonoBehaviour
 
             if (Vector3.Distance(pos, enemyPos) > 0.01f)
                 this.gameObject.transform.position = Vector3.MoveTowards(pos, enemyPos, moveSpeed * Time.deltaTime);
-            if (Vector3.Distance(rot.eulerAngles, targetRot) > 1.0f && Vector3.Distance(pos, enemyPos) > 0.1f)
-                this.gameObject.transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(rot.eulerAngles, targetRot, rotateSpeed * Time.deltaTime, 2.0f));
+            //if (Vector3.Distance(rot.eulerAngles, targetRot) > 1.0f && Vector3.Distance(pos, enemyPos) > 0.1f)
+            this.gameObject.transform.rotation = Quaternion.LookRotation(Vector3.RotateTowards(rot.eulerAngles, targetRot, rotateSpeed * Time.deltaTime, 2.0f));
             yield return null;
         }
 
@@ -208,7 +218,7 @@ public class EnterDetect : MonoBehaviour
             yield return null;
         }
         while (!finishedSettle);
-        UpdateAnimation(calmAnimSpeed);
+        UpdateAnimation(transitionRatio);
         PosTest.UpdateStatus(this.gameObject.name + " Finished Attack");
     }
 
@@ -225,13 +235,15 @@ public class EnterDetect : MonoBehaviour
         float[] posTolerances = { 0.02f, 0.02f, 0.02f };
         float[] rotTolerances = { 3f, 3f, 3f };
         bool notDetached = true;
+        GameObject effect = homeTrans.Find("Floating_Particles").gameObject;
+
         while (nearHome && notDetached)
         {
             //yield return new WaitForSecondsRealtime(3f);
             //if (!nearHome)
             //    break;
 
-            float settleDistance = 0.07f, ratio, transitionRatio = 0.5f, restDuration = 3.0f;
+            float settleDistance = 0.07f, ratio, restDuration = 3.0f;
             animalPos = animalTrans.position;
             homePos = homeTrans.position;
             animalRot = animalTrans.rotation.eulerAngles;
@@ -239,15 +251,19 @@ public class EnterDetect : MonoBehaviour
             tempDeltaPos = animalPos - homePos;
             tempDeltaRot = animalRot - homeRot;
             currentDistance = tempDeltaPos.magnitude;
+
             switch(guide)
             {
                 case Water.IxGuides.ghost:
-                    UpdateAnimation(currentDistance * calmAnimSpeed / maxDistance);
+                    //UpdateAnimation(currentDistance * calmAnimSpeed / maxDistance);
                     if (!clownfishGhostEvent && !waterScript.clownfishGhost.activeSelf)
                     {
                         waterScript.clownfishGhost.SetActive(true);
                         clownfishGhostEvent = true;
                     }
+                    ratio = FishSwim.Lerp(0, maxDistance, transitionRatio, 1, currentDistance);
+                    UpdateAnimation(calmAnimSpeed * ratio);
+                    bluetooth.BuzzValue = 255 - Mathf.RoundToInt(130.0f * ratio);
                     break;
                 case Water.IxGuides.trimodal:
                     ratio = FishSwim.Lerp(0,maxDistance, transitionRatio, 1,currentDistance);
@@ -263,6 +279,9 @@ public class EnterDetect : MonoBehaviour
             
             while(currentDistance <= settleDistance)
             {
+                if (!effect.activeSelf)
+                    effect.SetActive(true);
+
                 time += Time.deltaTime;
                 if(time >= restDuration)
                 {
@@ -280,7 +299,14 @@ public class EnterDetect : MonoBehaviour
                         switch (guide)
                         {
                             case Water.IxGuides.ghost:
-                                animalTrans.localScale = originalScale * FishSwim.Lerp(0, restDuration, 1, 1.5f, time);
+                                //animalTrans.localScale = originalScale * FishSwim.Lerp(0, restDuration, 1, 1.5f, time);
+                                Water.SetEffectAlpha(effect.GetComponent<ParticleSystem>(), FishSwim.Lerp(0, 3, 0.3f, 1, time));
+                                if (continueTrimodal)
+                                {
+                                    ratio = FishSwim.Lerp(0, restDuration, transitionRatio, 0, time);
+                                    UpdateAnimation(calmAnimSpeed * ratio < 0.1f ? 0.1f : calmAnimSpeed * ratio);
+                                    bluetooth.BuzzValue = 255 - Mathf.RoundToInt(130.0f * ratio);
+                                }
                                 break;
                             case Water.IxGuides.trimodal:
                                 ratio = FishSwim.Lerp(0, restDuration, transitionRatio, 0, time);
@@ -302,7 +328,13 @@ public class EnterDetect : MonoBehaviour
                         switch (guide)
                         {
                             case Water.IxGuides.ghost:
-                                animalTrans.localScale = originalScale;
+                                //animalTrans.localScale = originalScale;
+                                Water.SetEffectAlpha(effect.GetComponent<ParticleSystem>(), 0);
+                                if(continueTrimodal)
+                                {
+                                    UpdateAnimation(calmAnimSpeed * transitionRatio);
+                                    bluetooth.BuzzValue = 255 - Mathf.RoundToInt(130.0f * transitionRatio);
+                                }
                                 break;
                             case Water.IxGuides.trimodal:
                                 UpdateAnimation(calmAnimSpeed * transitionRatio);
@@ -323,6 +355,7 @@ public class EnterDetect : MonoBehaviour
                     {
                         case Water.IxGuides.ghost:
                             animalTrans.localScale = originalScale;
+                            effect.SetActive(false);
                             break;
                         case Water.IxGuides.trimodal:
                             break;
@@ -335,6 +368,8 @@ public class EnterDetect : MonoBehaviour
                 }
                     
             }
+            float animSpeed = animalAnimator == null ? animalAnimation[animalAnimation.clip.name].speed : animalAnimator.speed;
+            Debug.Log($"Distance: {currentDistance} | AnimSpeed: {animSpeed} | Buzz: {bluetooth.BuzzValue}");
             yield return null;
         }
         waterScript.audioPaused = false;
@@ -360,6 +395,7 @@ public class EnterDetect : MonoBehaviour
         localRot = this.gameObject.transform.localRotation;
         PosTest.UpdateStatus(this.gameObject.name + " Detached!");
         UpdateFeedback(Settled);
+        waterScript.ChangeFish();
         //StartCoroutine(CanvasHandler(canvasGood, 5.0f));
     }
 
@@ -381,6 +417,7 @@ public class EnterDetect : MonoBehaviour
             homeTrans = null;
         }
         waterScript.audioPaused = false;
+        Debug.Log($"Buzz: {bluetooth.BuzzValue}");
     }
 
     IEnumerator CanvasHandler(GameObject activeCanvas, float canvasLifespan)
@@ -406,11 +443,11 @@ public class EnterDetect : MonoBehaviour
         //audioSources[success ? 0 : 1].Play();
     }
 
-    void UpdateFeedback(Feedback target)
+    void UpdateFeedback(Feedback target, bool hasFired = false)
     {
         foreach (Feedback feedback in AllFeedback)
             feedback.Deactivate();
-        target.Activate(this);
+        target.Activate(this, hasFired);
     }
 
     void UpdateAnimation(float speed)
@@ -442,15 +479,18 @@ public class EnterDetect : MonoBehaviour
             this.audio = audio;
         }
 
-        public void Activate(EnterDetect enterDetect)
+        public void Activate(EnterDetect enterDetect, bool hasFired)
         {
             if (textUpdateable && !string.IsNullOrEmpty(text))
                 this.textMesh.text = text;
             //this.canvas.SetActive(true);
 
-            //this.audio.clip = this.audioClip;
-            //if(this.audio.clip != null)
-            //    audio.Play();
+            if(!hasFired)
+            {
+                this.audio.clip = this.audioClip;
+                if (this.audio.clip != null)
+                    audio.Play();
+            }
 
             //enterDetect.StartCoroutine(this.FeedbackLifecycle());
 
@@ -475,4 +515,5 @@ public class EnterDetect : MonoBehaviour
                 this.canvas.SetActive(false);
         }
     }
+
 }

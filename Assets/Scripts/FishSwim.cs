@@ -10,7 +10,9 @@ public class FishSwim : MonoBehaviour
     private float radius = 0.3f;
     private float angle = 0;
     private Transform trans, targetTrans;
-    public GameObject target;
+    public GameObject target, fishDest;
+    private GameObject effect;
+    private Water waterScript;
     private int state;
     private float restTimer = 0;
     Vector3 originalScale;
@@ -25,6 +27,8 @@ public class FishSwim : MonoBehaviour
         fishAnim = trans.gameObject.GetComponent<Animator>();
         originalAnimSpeed = fishAnim.speed;
         time = 0;
+        effect = target.transform.Find("Floating_Particles").gameObject;
+        waterScript = this.gameObject.transform.parent.GetComponentInChildren<Water>();
     }
 
     // Update is called once per frame
@@ -53,20 +57,41 @@ public class FishSwim : MonoBehaviour
                     state++;
                 break;
             case 4:
+                if (!effect.activeSelf)
+                    effect.SetActive(true);
                 restTimer += Time.deltaTime;
                 if (restTimer <= 3.0f)
                 {
-                    float newScale = Lerp(0, 3, 1, 1.5f, restTimer);
-                    trans.localScale = originalScale * newScale;
-                    fishAnim.speed = originalAnimSpeed * (1.7f - newScale);
+                    Water.SetEffectAlpha(effect.GetComponent<ParticleSystem>(), Lerp(0, 3, 0.3f, 1, restTimer));
+                    float ratio = Lerp(0, 3.0f, 0.5f, 0, restTimer);
+                    fishAnim.speed = EnterDetect.calmAnimSpeed * ratio < 0.1f ? 0.1f : EnterDetect.calmAnimSpeed * ratio;
+                    //float newScale = Lerp(0, 3, 1, 1.5f, restTimer);
+                    //trans.localScale = originalScale * newScale;
+                    //fishAnim.speed = originalAnimSpeed * (1.7f - newScale);
                 }
                 else
                     state++;
                 break;
-            default:
+            case 5:
                 time += Time.deltaTime;
                 if(time >= 3.0f)
-                    this.gameObject.SetActive(false);
+                    state++;
+                break;
+            case 6:
+                if(fishAnim.speed != 1)
+                    fishAnim.speed = 1;
+                tempQ = Quaternion.LookRotation(Vector3.RotateTowards(trans.forward, fishDest.transform.position - trans.position, speed * 3 * Time.deltaTime, 0f));
+                trans.rotation = tempQ;
+                trans.position = Vector3.MoveTowards(trans.position, fishDest.transform.position, speed * Time.deltaTime);
+                Water.SetEffectAlpha(effect.GetComponent<ParticleSystem>(), 
+                    Lerp(0, Vector3.Distance(effect.transform.position, fishDest.transform.position), 0, 1, Vector3.Distance(trans.position, fishDest.transform.position)));
+                if (trans.position == fishDest.transform.position)
+                    state++;
+                break;
+            default:
+                trans.gameObject.SetActive(false);
+                effect.SetActive(false);
+                waterScript.ActivateAnemone();
                 break;
 
         }
@@ -75,6 +100,10 @@ public class FishSwim : MonoBehaviour
 
     public static float Lerp(float startX, float endX, float startY, float endY, float x)
     {
+        if (x < startX)
+            x = startX;
+        else if (x > endX)
+            x = endX;
         float m = (endY - startY) / (endX - startX);
         return startY + m * (x - startX);
     } 
